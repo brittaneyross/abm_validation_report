@@ -13,10 +13,15 @@
   }
   ul.nav-pills {
       top: 20px;
-      position: fixed;
+      position: absolute;
+
   }
-  div.col-lg-6 div {
+
+  div.col-lg-10 div {
       font-size: 8px;
+      margin-left: 10px;
+      display:block;
+	    margin:auto;
   }
   #section1 {color: #fff; background-color: #1E88E5;}
   #section2 {color: #fff; background-color: #673ab7;}
@@ -29,14 +34,15 @@
         margin-left: 150px;
     }
   }
+
   </style>
 </head>
 <body data-spy="scroll" data-target="#myScrollspy" data-offset="20">
 
-<div class="container-fluid">
+<div class="container">
   <div class="row">
-    <nav class="col-lg-2" id="myScrollspy">
-      <ul class="nav nav-pills nav-stacked">
+    <nav class="col-lg-2" id="myScrollspy" style="float:left">
+      <ul class="nav nav-pills nav-stacked" >
         <h1>Table of  Contents</h1>
         <li class="active"><a href="#section1">Section 1</a></li>
         <li><a href="#section2">Section 2</a></li>
@@ -50,11 +56,11 @@
         </li>
       </ul>
     </nav>
-    <div class="col-lg-9">
+    <div class="col-lg-10">
       <div id="section1">
         <h1>Section 1</h1>
         <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-4">
           <p>Contrary to popular belief, Lorem
             Ipsum is not simply random text. It has
             roots in a piece of classical Latin literature
