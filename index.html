@@ -15,7 +15,7 @@
       top: 20px;
       position: fixed;
   }
-  div.col-lg-10 div {
+  div.col-lg-6 div {
       font-size: 8px;
   }
   #section1 {color: #fff; background-color: #1E88E5;}
@@ -24,7 +24,7 @@
   #section41 {color: #fff; background-color: #00bcd4;}
   #section42 {color: #fff; background-color: #009688;}
 
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: 810px) {
     #section1, #section2, #section3, #section41, #section42  {
         margin-left: 150px;
     }
@@ -33,10 +33,11 @@
 </head>
 <body data-spy="scroll" data-target="#myScrollspy" data-offset="20">
 
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <nav class="col-lg-2" id="myScrollspy">
       <ul class="nav nav-pills nav-stacked">
+        <h1>Table of  Contents</h1>
         <li class="active"><a href="#section1">Section 1</a></li>
         <li><a href="#section2">Section 2</a></li>
         <li><a href="#section3">Section 3</a></li>
@@ -49,25 +50,12 @@
         </li>
       </ul>
     </nav>
-    <div class="col-lg-10">
+    <div class="col-lg-9">
       <div id="section1">
         <h1>Section 1</h1>
-        <p>Contrary to popular belief, Lorem
-          Ipsum is not simply random text. It has
-          roots in a piece of classical Latin literature
-          from 45 BC, making it over 2000 years old. Richard
-          McClintock, a Latin professor at Hampden-Sydney College
-          in Virginia, looked up one of the more obscure Latin
-          words, consectetur, from a Lorem Ipsum passage, and
-          going through the cites of the word in classical
-          literature, discovered the undoubtable source. Lorem
-          Ipsum comes from sections 1.10.32 and 1.10.33 of "de
-          Finibus Bonorum et Malorum" (The Extremes of Good and Evil)
-          by Cicero, written in 45 BC. This book is a treatise on the
-          theory of ethics, very popular during the Renaissance. The
-          first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",
-          comes from a line in section 1.10.32.
-          Contrary to popular belief, Lorem
+        <div class="row">
+        <div class="col-lg-5">
+          <p>Contrary to popular belief, Lorem
             Ipsum is not simply random text. It has
             roots in a piece of classical Latin literature
             from 45 BC, making it over 2000 years old. Richard
@@ -96,7 +84,26 @@
               by Cicero, written in 45 BC. This book is a treatise on the
               theory of ethics, very popular during the Renaissance. The
               first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",
-              comes from a line in section 1.10.32.</p>
+              comes from a line in section 1.10.32.
+              Contrary to popular belief, Lorem
+                Ipsum is not simply random text. It has
+                roots in a piece of classical Latin literature
+                from 45 BC, making it over 2000 years old. Richard
+                McClintock, a Latin professor at Hampden-Sydney College
+                in Virginia, looked up one of the more obscure Latin
+                words, consectetur, from a Lorem Ipsum passage, and
+                going through the cites of the word in classical
+                literature, discovered the undoubtable source. Lorem
+                Ipsum comes from sections 1.10.32 and 1.10.33 of "de
+                Finibus Bonorum et Malorum" (The Extremes of Good and Evil)
+                by Cicero, written in 45 BC. This book is a treatise on the
+                theory of ethics, very popular during the Renaissance. The
+                first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",
+                comes from a line in section 1.10.32.</p>
+        </div>
+        <div class="col-lg-4">
+        </div>
+      </div>
       </div>
       <div id="section2">
         <h1>Section 2</h1>
