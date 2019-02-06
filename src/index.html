@@ -1,0 +1,957 @@
+<html>
+
+<head>
+	<title></title>
+	<meta charset="UTF-8">
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<script defer src="../bower_components/jqueryui/jquery-ui.min.js"></script>
+	<script defer src="../bower_components/spectrum/spectrum.js"></script>
+	<script defer src="../bower_components/chosen/chosen.jquery.js"></script>
+	<script defer src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script defer src="../bower_components/d3/d3.js"></script>
+  <script defer src="../bower_components/d3/d3-tip.js"></script>
+	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.3.0/d3-legend.js" charset="utf-8"></script>
+	<script defer src="../bower_components/nvd3/build/nv.d3.js"></script>
+	<script defer src="../bower_components/underscore/underscore-min.js"></script>
+	<script defer src="../bower_components/geostats/lib/geostats.js"></script>
+	<script defer type="text/javascript" src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js"></script>
+	<script defer src="../vendor/leaflet/leaflet-src.js"></script>
+	<script defer src="../vendor/three.min.js"></script>
+	<script defer src="../vendor/TweenMax.min.js"></script>
+	<script defer src="../vendor/vizicities.js"></script>
+	<script type="text/javascript" src="../abmviz_utilities.js"></script>
+
+	<script defer type="text/javascript" src="grouped_barchart.js"></script>
+	<script type="text/javascript" src='grouped_barchart_data.js'></script>
+
+	<script defer type="text/javascript" src="grouped_barchart_select.js"></script>
+	<script type="text/javascript" src='grouped_barchart_data_select.js'></script>
+
+	<script type="text/javascript" src='barchart_and_map.js'></script>
+	<script defer type="text/javascript" src="mapper.js"></script>
+	<script type="text/javascript" src='barchart_dropdownv2.js'></script>
+
+	<script defer type="text/javascript" src="radar-chart-nbremer.js"></script>
+
+	<link rel="shortcut icon" href="">
+	<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../bower_components/spectrum/spectrum.css" />
+	<link rel="stylesheet" href="../bower_components/jqueryui/themes/base/jquery-ui.min.css" />
+	<link rel="stylesheet" href="../bower_components/chosen/chosen.css" />
+	<link rel="stylesheet" href="../bower_components/nvd3/build/nv.d3.min.css" />
+	<link rel="stylesheet" href="../bower_components/geostats/lib/geostats.css" />
+	<link rel="stylesheet" href="../vendor/leaflet/leaflet.css" />
+	<link rel="stylesheet" href="../vendor/vizicities.css" />
+	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="grouped_barchart.css" />
+	<link rel="stylesheet" href="barchart_and_map.css" />
+	<link rel="stylesheet" href="sunburst.css" />
+	<link rel="stylesheet" href="timeuse.css" />
+	<link rel="stylesheet" href="three3d.css" />
+	<link rel="stylesheet" href="radar.css" />
+	<link rel="stylesheet" href="chord.css" />
+  <link rel="stylesheet" href="scatter.css" />
+	<script type="text/javascript">
+
+	</script>
+</head>
+<!-- end head -->
+
+<body>
+	<div class="container-fluid" id="main_div">
+<br>
+		<nav class="navbar navbar-inverse navbar-fixed-top" style="max-height:51px;">
+
+			<div class="navbar-header">
+				<a id="navbarlink" href="" style="padding-left:1em;padding-top:1.1em;margin-right:-.5em;" class="pull-left">
+				</a>
+				<a class="navbar-brand" id="title_id" href="../index.html">ABMVIZ</a>
+				<span id="scenario-header" style="font-size:2em;cursor:default" class="navbar-brand pull-right"></span>
+			</div>
+			<ul class="nav navbar-nav navbar-right" style="margin-right:1em;">
+				<li class="nav-item">
+					<a href="../index.html">Back to home</a>
+				</li>
+			</ul>
+		</nav>
+		<!-- end nav -->
+
+
+<div id="thenavbar">
+		<ul class="nav nav-tabs" role="tablist" id="the_tabs" style="display:inline-block">
+			<li id="nav0" role="presentation"><a href="#tripmode_tab"   role="tab" data-toggle="tab" style="display:none">Trip temp</a></li>
+			<li id="nav1"  role="presentation"><a href="#popsyn_tab"      role="tab" data-toggle="tab" style="display:none">Population Synthesis</a></li>
+			<li id="nav2"  role="presentation"><a href="#auto_tab"      role="tab" data-toggle="tab" style="display:none">Auto Ownership</a></li>
+			<li id="nav3"  role="presentation"><a href="#workflows_tab" role="tab" data-toggle="tab" style="display:none">Work Flows</a></li>
+			<li id="nav4"  role="presentation"><a href="#transit_tab"   role="tab" data-toggle="tab" style="display:none">Transit</a></li>
+			<li id="nav5"  role="presentation"><a href="#temp_tab"   role="tab" data-toggle="tab" style="display:none">Trip temp</a></li>
+			<li id="nav6"  role="presentation"><a href="#sunburst_tab"   role="tab" data-toggle="tab" style="display:none">Trip Mode</a></li>
+            <li id="nav7"  role="presentation"><a href="#scatter_tab"   role="tab" data-toggle="tab" style="display:none">Scatter</a></li>
+            <button id="leftnavbtn"><span class="glyphicon glyphicon-chevron-left" style="font-size:25px"></span></button>
+            <button id="rightnavbtn"><span class="glyphicon glyphicon-chevron-right" style="font-size:25px"></span></button>
+		</ul>
+	</div>
+
+<div class="tab-content">
+	<div role="tabpanel" class="tab-pane" id="tripmode_tab">
+		<div id="three3d" class="row dynamic-content">
+			<p class="text-center" style="font-size:2em">
+				<strong>
+					<span class="three3d-purpose"></span>
+				</strong>
+				<span id="three3d-current-period"></span>
+			</p>
+			<div class="col-xs-12" style="margin-top:1em;">
+				<div class="col-xs-6" style="margin-bottom:1em">
+
+
+					<div class="col-xs-12">
+						<label>
+							<input type="checkbox" id="three3d-controls">Controls
+							</input>
+						</label>
+						<label style="padding-left:10px;">
+							<input type="checkbox" id="three3d-centroids">Centroids
+							</input>
+						</label>
+						<div class="row control">
+							<!-- symbols defined at: https://graphemica.com/ -->
+							<button class="move left" title="move left">&larr;</button>
+							<button class="move right" title="move right">&rarr;</button> &nbsp;&nbsp;&nbsp;
+							<button class="move back" title="move back">&uarr;</button>
+							<button class="move forward" title="move forward">&darr;</button> &nbsp;&nbsp;&nbsp;
+							<!-- north east arrow ? https://graphemica.com/%E2%86%97 -->
+							<button class="tilt up" title="tilt up">&#8599;</button>
+							<button class="tilt down" title="tilt down">&#8601;</button> &nbsp;&nbsp;&nbsp;
+							<button class="rotate left" title="rotate left">&#8635;</button>
+							<button class="rotate right" title="rotate right">&#8634;</button> &nbsp;&nbsp;&nbsp;
+							<button class="zoom in" title="zoom in">&#9547;</button>
+							<button class="zoom out" title="zoom out">&#9473;</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-2" style="margin-bottom:1em;font-weight:bold">
+					<div id="three3d-classification-label">Classification</div>
+					<select class="form-control" id="three3d-classification">
+						<option value="quartiles" selected="selected">Quartiles</option>
+						<option value="even-interval">Even interval</option>
+						<option value="custom">Custom</option>
+					</select>
+				</div>
+				<div class="col-xs-2" style="margin-bottom:1em;font-weight:bold">
+					<div id="three3d-filter-label"></div>
+					<div id="three3d-filter-checkboxes"></div>
+				</div>
+				<div class="col-xs-2" style="margin-bottom:1em;font-weight:bold">
+					<div id="three3d-period-id">
+						<div id="three3d-period-label">Data Selection</div>
+						<select class="form-control" id="three3d-period">
+
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12" id="three3d-map" style="width: 100%;height:50%;"></div>
+			<div class="col-xs-4" style="margin-top:1em;text-align:right">
+				<table width="100%">
+					<tr>
+						<td rowspan="2">Palette:</td>
+						<td>
+							<div class="col-xs-10">
+								<div class="row">
+									<div class="ramp Blues">
+										<svg width="60" height="15">
+											<rect fill="rgb(239,243,255)" width="15" height="15" x="0"></rect>
+											<rect fill="rgb(189,215,231)" width="15" height="15" x="15"></rect>
+											<rect fill="rgb(107,174,214)" width="15" height="15" x="30"></rect>
+											<rect fill="rgb(49,130,189)" width="15" height="15" x="45"></rect>
+										</svg>
+									</div>
+									<div class="ramp Greens">
+										<svg width="60" height="15">
+											<rect fill="rgb(237,248,233)" width="15" height="15" x="0"></rect>
+											<rect fill="rgb(186,228,179)" width="15" height="15" x="15"></rect>
+											<rect fill="rgb(116,196,118)" width="15" height="15" x="30"></rect>
+											<rect fill="rgb(49,163,84)" width="15" height="15" x="45"></rect>
+										</svg>
+									</div>
+									<div class="ramp Greys">
+										<svg width="60" height="15">
+											<rect fill="rgb(247,247,247)" width="15" height="15" x="0"></rect>
+											<rect fill="rgb(204,204,204)" width="15" height="15" x="15"></rect>
+											<rect fill="rgb(150,150,150)" width="15" height="15" x="30"></rect>
+											<rect fill="rgb(99,99,99)" width="15" height="15" x="45"></rect>
+										</svg>
+									</div>
+									<div class="ramp RedGreen">
+										<svg width="60" height="15">
+											<rect fill="rgb(222,45,38)" width="15" height="15" x="0"></rect>
+											<rect fill="rgb(198,110,9)" width="15" height="15" x="15"></rect>
+											<rect fill="rgb(133,130,23)" width="15" height="15" x="30"></rect>
+											<rect fill="rgb(34,139,34)" width="15" height="15" x="45"></rect>
+										</svg>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="row">
+								<div class="col-xs-10">
+									<div class="ramp Oranges">
+										<svg width="60" height="15">
+											<rect fill="rgb(254,237,222)" width="15" height="15" x="0"></rect>
+											<rect fill="rgb(253,190,133)" width="15" height="15" x="15"></rect>
+											<rect fill="rgb(253,141,60)" width="15" height="15" x="30"></rect>
+											<rect fill="rgb(230,85,13)" width="15" height="15" x="45"></rect>
+										</svg>
+									</div>
+									<div class="ramp Purples">
+										<svg width="60" height="15">
+											<rect fill="rgb(242,240,247)" width="15" height="15" x="0"></rect>
+											<rect fill="rgb(203,201,226)" width="15" height="15" x="15"></rect>
+											<rect fill="rgb(158,154,200)" width="15" height="15" x="30"></rect>
+											<rect fill="rgb(117,107,177)" width="15" height="15" x="45"></rect>
+										</svg>
+									</div>
+									<div class="ramp Reds">
+										<svg width="60" height="15">
+											<rect fill="rgb(254,229,217)" width="15" height="15" x="0"></rect>
+											<rect fill="rgb(252,174,145)" width="15" height="15" x="15"></rect>
+											<rect fill="rgb(251,106,74)" width="15" height="15" x="30"></rect>
+											<rect fill="rgb(222,45,38)" width="15" height="15" x="45"></rect>
+										</svg>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+
+			</div>
+			<div class="col-xs-2" style="margin-top:1em;text-align:left">
+
+				<input type="range" class="slider" value="100" id="opacityRange" min="1" max="100"/>
+                <p>	Opacity: <span id="opacityval"></span></p>
+			</div>
+			<div class="col-xs-6" style="margin-top:1em;text-align:right">
+				<input type="text" id="three3d-naColor" />N/A
+
+				</nobr>
+			</div>
+			<div class="col-xs-12" style="margin-top:1em;">
+				<div style="margin-bottom:1em;margin-top:1.6em;" id="three3d-slider-time"></div>
+				<div style="margin-bottom:1em;margin-top:1.6em;" id="three3d-slider"></div>
+				<div class="row">
+					<div class="col-xs-6">
+						<button id="three3d-update-map" style="display:none" class="btn">Update Map</button>
+						<button id="three3d-start-cycle-map" class="btn">Cycle Through Day</button>
+						<button id="three3d-stop-cycle-map" class="btn" style="display:none">Stop Cycle</button>
+					</div>
+					<div class="col-xs-6" id="three3d-redraw">
+						Redraw
+
+
+						<select id="three3d-cycle-frequency" class="form-control form-control-inline">
+							<option value="1">every 1 sec</option>
+							<option value="2">every 2 sec</option>
+							<option value="3">every 3 sec</option>
+							<option value="4">every 4 sec</option>
+							<option value="5">every 5 sec</option>
+							<option value="6">every 6 sec</option>
+							<option value="7">every 7 sec</option>
+							<option value="8">every 8 sec</option>
+							<option value="9">every 9 sec</option>
+							<option value="10">every 10 sec</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+       </div>
+		<!--end three3d-->
+<div role="tabpanel" class="tab-pane" id="popsyn_tab">
+	<div class="container">
+		<div class="row">
+			<br>
+			<br>
+			<br>
+			<br>
+			<h2>HEADER</h2>
+			<p>PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+			  "activity-based" modeling framework. This is a multi-year effort
+			  outlined in our Strategic Plan for Advanced Modeling at CMAP.
+			  Activity-Based Modeling is increasingly viewed as a superior method
+			  to better understand the socioeconomic determinants of travel choice
+			  and for evaluating modern transportation solutions. The research effort to
+			  implement advanced models for metropolitan planning is still comparatively young.
+				PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+				  "activity-based" modeling framework. This is a multi-year effort
+				  outlined in our Strategic Plan for Advanced Modeling at CMAP.
+				  Activity-Based Modeling is increasingly viewed as a superior method
+				  to better understand the socioeconomic determinants of travel choice
+				  and for evaluating modern transportation solutions. The research effort to
+				  implement advanced models for metropolitan planning is still comparatively young</p>
+		</div>
+
+		<!--Barchart Selection Options!-->
+		<div class="row">
+			<div align="center">
+			<h3>PLACE HOLDER TITLE</h3>
+		</div>
+			<div class="col-xs-2">
+				<br>
+				<br>
+				<p><small>Select a data type for comparison.Placeholder text.
+				Add data source information and any notes</small></p>
+				<select id="catPopSyn">
+		      <option value="veh">Vehicles</option>
+		      <option value="hh">Households</option>
+		    </select>
+				<br>
+				<br>
+				<label class="checkbox-inline">
+					<input id="barchart-toggle-percentage" type="checkbox"><small>Show as Percentage?</small></label>
+			</div>
+			<div class="col-xs-8" style="height:400px">
+				<h3></h3>
+				<div id="barchart-div"></div>
+				<div id="barchart-container"></div>
+			</div>
+	  </div>
+		<div class="row">
+			<br>
+			<br>
+			<br>
+			<br>
+			<h2>HEADER</h2>
+			<p>PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+			  "activity-based" modeling framework. This is a multi-year effort
+			  outlined in our Strategic Plan for Advanced Modeling at CMAP.
+			  Activity-Based Modeling is increasingly viewed as a superior method
+			  to better understand the socioeconomic determinants of travel choice
+			  and for evaluating modern transportation solutions. The research effort to
+			  implement advanced models for metropolitan planning is still comparatively young.
+				PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+				  "activity-based" modeling framework. This is a multi-year effort
+				  outlined in our Strategic Plan for Advanced Modeling at CMAP.
+				  Activity-Based Modeling is increasingly viewed as a superior method
+				  to better understand the socioeconomic determinants of travel choice
+				  and for evaluating modern transportation solutions. The research effort to
+				  implement advanced models for metropolitan planning is still comparatively young</p>
+		</div>
+		</div>
+</div>
+<!-- end grouped-barchart -->
+<div role="tabpanel" class="tab-pane" id="auto_tab">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+			<br>
+			<br>
+			<br>
+			<br>
+			<h2>Auto Ownership PLACEHOLDER</h2>
+			<p>PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+				"activity-based" modeling framework. This is a multi-year effort
+				outlined in our Strategic Plan for Advanced Modeling at CMAP.
+				Activity-Based Modeling is increasingly viewed as a superior method
+				to better understand the socioeconomic determinants of travel choice
+				and for evaluating modern transportation solutions. The research effort to
+				implement advanced models for metropolitan planning is still comparatively young.
+				PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+					"activity-based" modeling framework. This is a multi-year effort
+					outlined in our Strategic Plan for Advanced Modeling at CMAP.
+					Activity-Based Modeling is increasingly viewed as a superior method
+					to better understand the socioeconomic determinants of travel choice
+					and for evaluating modern transportation solutions. The research effort to
+					implement advanced models for metropolitan planning is still comparatively young</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="col-xs-3">
+				</div>
+				<div class="col-xs-6">
+				<br>
+				<br>
+				<div align="center">
+					<h3>Households by Auto Ownership PLACEHOLDER</h3>
+					<br>
+			 </div>
+				<table class="table" width="20%">
+					<thead>
+				  <tr>
+				    <th>Vehicles in Household</th>
+				    <th>Census</th>
+				    <th>Survey</th>
+						<th>Model</th>
+				  </tr>
+				  </thead>
+					<tbody>
+				  <tr>
+				    <td>0</td>
+				    <td>0</td>
+				    <td>0</td>
+						<td>0</td>
+				  </tr>
+					<tr>
+				    <td>1</td>
+				    <td>0</td>
+				    <td>0</td>
+						<td>0</td>
+				  </tr>
+					<tr>
+				    <td>2</td>
+				    <td>0</td>
+				    <td>0</td>
+						<td>0</td>
+				  </tr>
+					<tr>
+				    <td>3</td>
+				    <td>0</td>
+				    <td>0</td>
+						<td>0</td>
+				  </tr>
+					<tr>
+				    <td>4+</td>
+				    <td>0</td>
+				    <td>0</td>
+						<td>0</td>
+				  </tr>
+				</tbody>
+				</table>
+				<div class="caption" align="middle">
+					<p>Source placeholder. table notes ect</p>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<br>
+			<br>
+			<div align="center">
+			<h3>Households by Auto Ownership PLACEHOLDER</h3>
+			<br>
+		 </div>
+		<div class="col-xs-6">
+			<div id="mode-share-by-county" class="row dynamic-content">
+				<div class="row" style="width:100%;height:50%;">
+					<svg id="mode-share-by-county-chart"></svg>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-6">
+			 <div class="col-xs-12" id="mode-share-by-county-map" style="width: 100%;height:50%;"></div>
+		</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+			<br>
+			<div class="col-xs-6">
+				<p><small>Select a data type for comparison.Placeholder text.
+				Add data source information and any notes</small></p>
+				<label>
+					<input type="checkbox" checked id="mode-share-by-county-stacked" />Stacked
+				</label>
+			</div>
+			<div class="col-xs-6">
+				<p><small>Select a data type for comparison.Placeholder text.
+				Add data source information and any notes</small></p>
+				<div class="col-xs-6">
+					<select class="form-control" id="mode-share-by-county-current-trip-mode-zones"></select>
+				</div>
+				<div class="col-xs-6" style="margin-bottom:2em;">
+					<select class="form-control" id="mode-share-by-county-classification">
+					<option value="quartiles" selected="selected">Quartiles</option>
+					<option value="jenks">Natural breaks (Jenks)</option>
+					<option value="even-interval">Even interval</option>
+					<option value="custom">Custom</option>
+					</select>
+				</div>
+				<div class="col-xs-2">
+					<button type="button" id="mode-share-by-county-update-map" style="display:none" class="btn">Update Map</button>
+				</div>
+			</div>
+		</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+			<br>
+			<br>
+			<h2>Auto Ownership PLACEHOLDER</h2>
+			<p>PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+				"activity-based" modeling framework. This is a multi-year effort
+				outlined in our Strategic Plan for Advanced Modeling at CMAP.
+				Activity-Based Modeling is increasingly viewed as a superior method
+				to better understand the socioeconomic determinants of travel choice
+				and for evaluating modern transportation solutions. The research effort to
+				implement advanced models for metropolitan planning is still comparatively young.
+				PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+				"activity-based" modeling framework. This is a multi-year effort
+				outlined in our Strategic Plan for Advanced Modeling at CMAP.
+				Activity-Based Modeling is increasingly viewed as a superior method
+				to better understand the socioeconomic determinants of travel choice
+				and for evaluating modern transportation solutions. The research effort to
+				implement advanced models for metropolitan planning is still comparatively young</p>
+		</div>
+		</div>
+	</div>
+</div>
+
+<div role="tabpanel" class="tab-pane" id="workflows_tab">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+			<br>
+			<br>
+			<br>
+			<br>
+			<h2>Auto Ownership PLACEHOLDER</h2>
+			<p>PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+				"activity-based" modeling framework. This is a multi-year effort
+				outlined in our Strategic Plan for Advanced Modeling at CMAP.
+				Activity-Based Modeling is increasingly viewed as a superior method
+				to better understand the socioeconomic determinants of travel choice
+				and for evaluating modern transportation solutions. The research effort to
+				implement advanced models for metropolitan planning is still comparatively young.
+				PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+					"activity-based" modeling framework. This is a multi-year effort
+					outlined in our Strategic Plan for Advanced Modeling at CMAP.
+					Activity-Based Modeling is increasingly viewed as a superior method
+					to better understand the socioeconomic determinants of travel choice
+					and for evaluating modern transportation solutions. The research effort to
+					implement advanced models for metropolitan planning is still comparatively young</p>
+			</div>
+		</div>
+		<div class="row">
+			<br>
+			<div align = "center">
+			<h3>Trip flows PLACEHOLDER</h3>
+		  </div>
+			<div id="chord" class="row dynamic-content">
+				<div class="col-md-6 col-sm-12 right-border">
+					<div id="chord-tooltip" class="">
+					</div>
+					<div id="chord-main">
+						<div id="chord-dropdown-div" class="col-xs-5">
+							<p class="chord-chart-maingroup"></p>
+						</div>
+						<div id="chord-chart-container"></div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12 ">
+					<div class="col-xs-12" id="chord-by-district-map" style="width: 100%;height:75%;"></div>
+					<div class="col-xs-6" style="margin-top:1em;text-align:right">
+					</div>
+				</div>
+				<div class="caption" align="middle">
+					<p><small>PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+						"activity-based" modeling framework. This is a multi-year effort
+						outlined in our Strategic Plan for Advanced Modeling at CMAP.</small></p>
+				</div>
+			</div>
+		</div>
+	</div>
+		<!-- end timeuse -->
+</div>
+<div role="tabpanel" class="tab-pane" id="sunburst_tab">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+			<br>
+			<br>
+			<br>
+			<br>
+			<h2>Auto Ownership PLACEHOLDER</h2>
+			<p>PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+				"activity-based" modeling framework. This is a multi-year effort
+				outlined in our Strategic Plan for Advanced Modeling at CMAP.
+				Activity-Based Modeling is increasingly viewed as a superior method
+				to better understand the socioeconomic determinants of travel choice
+				and for evaluating modern transportation solutions. The research effort to
+				implement advanced models for metropolitan planning is still comparatively young.
+				PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+					"activity-based" modeling framework. This is a multi-year effort
+					outlined in our Strategic Plan for Advanced Modeling at CMAP.
+					Activity-Based Modeling is increasingly viewed as a superior method
+					to better understand the socioeconomic determinants of travel choice
+					and for evaluating modern transportation solutions. The research effort to
+					implement advanced models for metropolitan planning is still comparatively young</p>
+			</div>
+		</div>
+		<div class="row">
+			<div align="center">
+				<br>
+				<h2>Trip Mode PLACEHOLDER</h2>
+				<br>
+			</div>
+				<div id="sunburst" class="row dynamic-content">
+					<p class="text-center" style="font-size:2em">
+					</p>
+					<div class="col-xs-5" align="center">
+					<h3>Model PLACEHOLDER</h3>
+					<div  id="sunburst-chart"></div>
+					</div>
+					<div class="col-xs-2">
+						<br>
+						<br>
+						<p><small>PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+							"activity-based" modeling framework. This is a multi-year effort
+							outlined in our Strategic Plan for Advanced Modeling at CMAP.</small></p>
+					<div id="sunburst-legend" class="col-xs-2"></div>
+					</div>
+					<div class="col-xs-5" align="center">
+					<h3>SURVEY PLACEHOLDER</h3>
+					<div  id="sunburst-chart"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div id="sunburst-explanation" style="visibility: hidden;" class="col-xs-5">
+					<p>
+						<span id="sunburst-percentage"></span>
+						<br/>
+						<span id="sunburst-current-node"></span>
+						<br/>
+						<span id="sunburst-current-node-value"></span>
+					</p>
+				</div>
+				<div id="sunburst-explanation" style="visibility: hidden;" class="col-xs-5">
+					<p>
+						<span id="sunburst-percentage"></span>
+						<br/>
+						<span id="sunburst-current-node"></span>
+						<br/>
+						<span id="sunburst-current-node-value"></span>
+					</p>
+				</div>
+			</div>
+	</div>
+</div>
+		<!-- end sunburst -->
+		<!-- begin chord -->
+<div role="tabpanel" class="tab-pane" id="transit_tab">
+		<div id="chord" class="row dynamic-content">
+
+			<p class="text-center" style="font-size:2em">
+
+				<strong>
+					<span class="chord-chart-maingroup"></span>,</strong> by
+
+			</p>
+			<div class="col-md-6 col-sm-12 right-border">
+				<div id="chord-tooltip" class="">
+
+				</div>
+				<div id="chord-main">
+					<div id="chord-dropdown-div" class="col-xs-5">
+						<p class="chord-chart-maingroup"></p>
+					</div>
+
+					<div id="chord-chart-container"></div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-12 ">
+				<p></p>
+
+				<div class="col-xs-12" id="chord-by-district-map" style="width: 100%;height:75%;"></div>
+				<div class="col-xs-6" style="margin-top:1em;text-align:right">
+
+				</div>
+
+			</div>
+		</div>
+
+                            </div>
+		<!-- end chord -->
+                            <div role="tabpanel" class="tab-pane" id="temp_tab">
+		<div id="radar" class="row dynamic-content">
+
+			<p class="text-center" style="font-size:2em">
+				<span class="radar-maingroup">RADAR CHARTS</span>
+			</p>
+			<div id="radar-sidebar" class="col-xs-2">
+				<div id="radar-text-area"></div>
+
+				<div id="radar-legend"></div>
+			</div>
+			<div id="radar-main" class="col-xs-10">
+				<div id="radar-chart-container"></div>
+			</div>
+		</div>
+                            </div>
+		<!-- end radar -->
+	<div role="tabpanel" class="tab-pane" id="scatter_tab">
+        <div id="scatter" class="row dynamic-content">
+
+
+			<div class="col-xs-12 right-border">
+				<p class="text-center" style="font-size:2em;width:1050px;">
+
+				<strong><span class="scatter-chart-yaxis-title"></span></strong> /
+				<strong><span class="scatter-chart-xaxis-title"></span></strong>
+			</p>
+				<div id="scatter-tooltip" class="">
+				</div>
+				<div id="scatter-main">
+
+					<div id="scatter-chart-container"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+        </div>
+        </div>
+
+</body>
+<!-- end body -->
+
+</html>
+
+
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script type="text/javascript">
+	// Parse the URL parameter
+	var visualizations;
+	function getParameterByName(name, url) {
+		if (!url) url = window.location.href;
+		name = name.replace(/[\[\]]/g, "\\$&");
+		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+			results = regex.exec(url);
+		if (!results) return null;
+		if (!results[2]) return '';
+		return decodeURIComponent(results[2].replace(/\+/g, " "));
+	}
+	// Give the parameter a variable name
+
+	function fileExists(url,id, tab) {
+        var returnme = true;
+        d3.text(url, function (error, data) {
+             if (error) {
+                $(id).hide();
+                $('a[href="' + tab + '"]').hide();
+                return;
+            }
+            var firstrow = d3.csv.parseRows(data)[0];
+
+            if (firstrow == "<html>") {
+                $(id).hide();
+                $('a[href="' + tab + '"]').hide();
+            } else {
+                $(id).show();
+                $('a[href="' + tab + '"]').show();
+                var shownTabs = $('li[role="presentation"]').children(":visible");
+                if (shownTabs.length > 0)
+                    shownTabs[0].click();
+            }
+        });
+
+    }
+	$(document).ready(function () {
+    var threedanimated_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/3DAnimatedMapData.csv";
+    fileExists(threedanimated_path,"#three3d","#tripmode_tab");
+
+  var timeuse_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/TimeUseData.csv";
+	fileExists(timeuse_path,'#timeuse','#transit_tab');
+
+	var chord_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/ChordData.csv";
+	fileExists(chord_path,'#chord','#workflows_tab');
+
+	var barchartmap_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/BarChartAndMapData.csv";
+	render_barchart_map(barchartmap_path, "../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json", "mode-share-by-county");
+	fileExists(barchartmap_path,"#mode-share-by-county","#auto_tab");
+
+	var barchartmap_path2 = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/BarChartAndMapData.csv";
+	render_barchart_map(barchartmap_path2, "../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json", "mode-share-by-county2");
+	fileExists(barchartmap_path,"#mode-share-by-county2","#auto_tab");
+
+	//makeGroupChartv2("data/ModeByPurpose01.csv","#PurposeChartpums","#catPopSyn","#myCheckbox",3);
+	// var barchart_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/BarChartData.csv";
+	// render_barchart(barchart_path,"../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json","gbarchart");
+	// fileExists(barchart_path,"#gbarchart-div","#popsyn_tab");
+	//
+	var barchart_path2 = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/BarChartData_select.csv";
+	render_barchart_select(barchart_path2,"../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json","barchart", "#catPopSyn");
+	fileExists(barchart_path2,"#barchart-div","#popsyn_tab");
+
+	var radar_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/RadarChartsData.csv";
+	fileExists(radar_path,"#radar","#temp_tab");
+
+	var sunburst_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/TreeMapData.csv";
+	fileExists(sunburst_path,"#sunburst","#sunburst_tab");
+
+	var scatter_path = "../data/" + abmviz_utilities.GetURLParameter("region") + "/" + abmviz_utilities.GetURLParameter("scenario") + "/Scatter.csv";
+	fileExists(scatter_path,"#scatter","#scatter_tab");
+ var shownTabs = $('li[role="presentation"]').children(":visible");
+		if(shownTabs.length>0)
+		    shownTabs[0].click();
+/* $(window).load(function() {
+  var shownTabs = $('li[role="presentation"]').children(":visible");
+		if(shownTabs.length>0)
+		    shownTabs[0].click();
+    });*/
+	});
+</script>
+
+<script defer type="text/javascript">
+	var region = abmviz_utilities.GetURLParameter("region");
+	$.ajaxSetup({
+  cache: true
+});
+	var loadedScripts = {
+	    "three3d":false,
+        "grouped":false,
+        "barchart":false,
+        "timeuse":false,
+        "chord":false,
+        "radar":false,
+        "sunburst":false,
+        "scatter": false,
+    };
+    $.getJSON("../data/" + region + "/region.json", function (data) {
+		var icon = data.Icon;
+		var logo = data.Logo;
+		var title = data.Title;
+		var linkURL = data.LinkURL;
+		var navbartitle = data.NavbarTitle;
+		var tabbedCharts = data.TabbedCharts;
+		$("link[rel*='icon']").attr("href", "../data/" + region + "/img/" + icon + "");
+		$("title").text(title);
+		$('#title_id').text(navbartitle);
+		$('#navbarlink').attr("href", linkURL);
+		$('#logo_id').attr("src", "../data/" + region + "/img/" + logo + "");
+
+		$.each(data.colorRamps, function (key, value) {
+			if (value == false)
+				$('.' + [key]).remove();
+		});
+		var ids =
+			{"3DMap": "three3d", "BarMap": "mode-share-by-county", "GrpBar": "grouped-barchart-div", "Chord":"chord","TimeUse": "timeuse", "Radar": "radar", "Sunburst": "sunburst","Scatter":"scatter" };
+		var jsFiles =
+			{"3DMap": "three3d", "BarMap": "barchart_and_map", "GrpBar": "grouped_barchart_data", "Chord":"chord","TimeUse": "timeuse", "Radar": "radar", "Sunburst": "sunburst","Scatter":"scatter"	};
+		var tablinks =
+            {"3DMap": "tripmode_tab", "BarMap": "auto_tab", "GrpBar": "popsyn_tab", "Chord":"workflows_tab","TimeUse": "transit_tab", "Radar": "temp_tab", "Sunburst": "sunburst_tab","Scatter":"scatter_tab"	};
+
+	if(tabbedCharts == undefined || tabbedCharts==false) {
+	    $('#the_tabs').hide();
+        $.each(data.visualizations, function (key, value) {
+            $('#' + ids[key]).appendTo($("#main_div"));
+            $('#'+ids[key]).prepend("<hr>");
+            $.getScript(jsFiles[key]+".js");
+        });
+
+    } else {
+	    var navIdx =0;
+	    var elementStore = new Array();
+	    $.each(data.visualizations, function (key, value) {
+	        var currEl = $('a[href="#'+tablinks[key]+'"]').closest('li');
+	       $('#the_tabs').append(currEl);
+	    });
+    }
+	});
+		$('a[href="#tripmode_tab"]').on('shown.bs.tab', function (e) {
+		    if(loadedScripts["three3d"] ==false){
+                $.getScript("three3d.js").done(function(scripts,textStatus){
+                    loadedScripts["three3d"] = true;
+                });
+            } else {
+		        window.dispatchEvent(new Event('resize'));
+            }
+        });
+		// $('a[href="#popsyn_tab"]').on('shown.bs.tab', function (e) {
+		//     if(loadedScripts["grouped"] ==false){
+    //             $.getScript("grouped_barchart_data.js").done(function(scripts,textStatus){
+    //                 loadedScripts["grouped"] = true;
+    //             });
+    //         } else {
+    //             window.dispatchEvent(new Event('resize'));
+    //         }
+    //     });
+    // $('a[href="#auto_tab"]').on('shown.bs.tab', function (e) {
+    // if(loadedScripts["barchart"] ==false){
+    //         $.getScript("barchart_and_map.js").done(function(scripts,textStatus){
+    //             loadedScripts["barchart"] = true;
+    //         });
+    //     } else {
+    //         window.dispatchEvent(new Event('resize'));
+		//
+    //     }
+    // });
+		$('a[href="#workflows_tab"]').on('shown.bs.tab', function (e) {
+		    if(loadedScripts["timeuse"] ==false){
+                $.getScript("timeuse.js").done(function(scripts,textStatus){
+                    loadedScripts["timeuse"] = true;
+                });
+            } else {
+		        window.dispatchEvent(new Event('resize'));
+            }
+        });
+		$('a[href="#transit_tab"]').on('shown.bs.tab', function (e) {
+		    if(loadedScripts["chord"] ==false){
+                $.getScript("chord.js").done(function(scripts,textStatus){
+                    loadedScripts["chord"] = true;
+                });
+            } else {
+		        window.dispatchEvent(new Event('resize'));
+            }
+        });
+		$('a[href="#temp_tab"]').on('shown.bs.tab', function (e) {
+		    if(loadedScripts["radar"] ==false){
+                $.getScript("radar.js").done(function(scripts,textStatus){
+                    loadedScripts["radar"] = true;
+                });
+            } else {
+		        window.dispatchEvent(new Event('resize'));
+            }
+        });
+        $('a[href="#sunburst_tab"]').on('shown.bs.tab', function (e) {
+		    if(loadedScripts["sunburst"] ==false){
+                $.getScript("sunburst.js").done(function(scripts,textStatus){
+                    loadedScripts["sunburst"] = true;
+                });
+            } else {
+		        window.dispatchEvent(new Event('resize'));
+            }
+        });
+         $('a[href="#scatter_tab"]').on('shown.bs.tab', function (e) {
+		    if(loadedScripts["scatter"] ==false){
+                $.getScript("scatter.js").done(function(scripts,textStatus){
+                    loadedScripts["scatter"] = true;
+                });
+            } else {
+		        window.dispatchEvent(new Event('resize'));
+            }
+        });
+
+         $('#leftnavbtn').click(function(d) {
+             var shownTabs = $('li[role="presentation"]').children(":visible");
+             var i = 0;
+             var activeIdx = 0;
+             $.each(shownTabs, function (d) {
+                 if ($(this).closest('li').hasClass('active')) {
+                     activeIdx = i;
+                 }
+                 i++;
+             });
+             var nextIdx = activeIdx - 1 < 0 ? shownTabs.length - 1 : activeIdx - 1;
+             shownTabs[nextIdx].click();
+         });
+          $('#rightnavbtn').click(function(d) {
+              var shownTabs = $('li[role="presentation"]').children(":visible");
+              var i = 0;
+              var activeIdx = 0;
+              $.each(shownTabs, function (d) {
+                  if ($(this).closest('li').hasClass('active')) {
+                      activeIdx = i;
+                      return;
+                  }
+                  i++;
+              });
+              var nextIdx = activeIdx + 1 >= shownTabs.length ? 0 : activeIdx + 1;
+              shownTabs[nextIdx].click();
+          });
+</script>

@@ -1,0 +1,51 @@
+{
+  "Title":"SACOG ABMVIZ",
+  "CountyFile":"sacog_counties.json",
+  "ZoneFile":"sacogll.json",
+  "Icon":"sacog.ico",
+  "Logo":"sacog-logo.png",
+  "NavbarTitle":"CMAP Activity-Base Model",
+  "LinkURL":"https://www.cmap.illinois.gov/",
+  "TabbedCharts": true,
+  "CenterMap": [38.57576, -121.47885],
+  "FrontPageTitle": "CMAP Activity Based Model Reports",
+  "FrontPageGraphic": "sacog-logo.png",
+  "scenarios":{
+    "Calibration": "- CT-RAMP",
+    "Validation": "- Model Assignments"
+  },
+  "visualizations":{
+  "GrpBar":true,
+  "BarMap":true,
+  "Chord": true,
+  "Sunburst":true,
+  "TimeUse":false,
+  "Radar":false,
+  "Sunburst":false,
+  "3DMap":false,
+  "Chord": false
+},
+  "RadarCharts":{
+    "NumberColsRadar":4,
+    "IndependentScale":[""],
+    "ConvertAxesToPercent":true
+  },
+  "GroupedCharts":{
+    "NumberColsGrouped":1,
+    "SwapLegendByDefault":true,
+    "ShowAsPercentByDefault":true,
+    "ShowAsVerticalByDefault":true,
+    "StackAllChartsByDefault":false,
+    "ChartWidthOverride": []
+  },
+  "ThreeDMap":{
+    "ShowPeriodsAsDropdown":false,
+    "DataHasPeriods":true,
+    "ZoneFile": []
+  },
+  "Chord": {
+    "ZoneFilterFile": "districts.csv",
+    "LabelSize": "14",
+    "LegendText": "TRIPS"
+    }
+}

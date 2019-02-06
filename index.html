@@ -1,184 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style>
-  body {
-      position: relative;
-  }
-  ul.nav-pills {
-      top: 20px;
-      position: absolute;
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title> ABMVIZ</title>
+	<link rel="shortcut icon" href="">
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="bower_components/d3/d3.min.js"></script>
+	<script type="text/javascript">
+		$.getJSON( "config.json", function (data) {
+           $.each(data, function (key, val) {
+               var setdefault = false;
+               var regiontitle = "";
+               if(key =="regions") {
+                   $.each(val, function (k, v) {
+                       $('#scenarios').append('<div id="' + k + '_id' + '"></div>');
+                       $.getJSON("data/" + k + "/region.json", function (reg) {
+                            regiontitle = reg.FrontPageTitle;
+                           if (v.default === true && setdefault == false) {
+                               setdefault = true;
+                               var icon = reg.Icon;
+                               var logo = reg.Logo;
+                               var title = reg.Title;
+                               var linkURL = reg.LinkURL;
+                               var navbartitle = reg.NavbarTitle;
+                               $("link[rel*='icon']").attr("href", "data/" + k + "/img/" + icon + "");
+                               $("title").text(title);
+                               $('#title_id').text(navbartitle);
+                               $('#navbarlink').attr("href", linkURL);
+                               $('#logo_id').attr("src", "data/" + k + "/img/" + logo + "");
+                           }
+                           $('#' + k + '_id').append("<h4>"+ regiontitle +"</h4>");
+                           $('#' + k + '_id').append("<ul id='" + k + "_scenarios' class='scenarios' style='margin-bottom: 25px;'> </ul>");
+                               $.each(reg.scenarios, function (key, value) {
+                                   if(Array.isArray(reg.scenarios)) {
+                                           $("#" + k + "_scenarios").append("<li><a class='scenariolink' href='src/index.html?region=" + k + "&scenario=" + value.name + "'>" + value.name + value.label + "</a></li>");
+                                   } else {
+                                       $("#" + k + "_scenarios").append("<li><a class='scenariolink' href='src/index.html?region=" + k + "&scenario=" + key + "'>" + key + value + "</a></li>");
+                                   }
+                               });
+                       });
+                   });
+               }
+           });
+        });
+	</script>
 
-  }
-
-  div.col-lg-10 div {
-      font-size: 12px;
-	    margin:auto;
-  }
-
-
-  #section1 {color: #fff; background-color: #1E88E5;}
-  #section2 {color: #fff; background-color: #673ab7;}
-  #section3 {color: #fff; background-color: #ff9800;}
-  #section41 {color: #fff; background-color: #00bcd4;}
-  #section42 {color: #fff; background-color: #009688;}
-
-  @media screen and (max-width: 810px) {
-    #section1, #section2, #section3, #section41, #section42  {
-        margin-left: 200px;
-
-    }
-  }
-
-  </style>
 </head>
-<body data-spy="scroll" data-target="#myScrollspy" data-offset="20">
 
-<div class="container-fluid">
-  <div class="row">
-    <nav class="col-lg-2" id="myScrollspy" style="float:left">
-      <ul class="nav nav-pills nav-stacked" >
-        <h1>Table of  Contents</h1>
-        <li class="active"><a href="#section1">Section 1</a></li>
-        <li><a href="#section2">Section 2</a></li>
-        <li><a href="#section3">Section 3</a></li>
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Section 4 <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#section41">Section 4-1</a></li>
-            <li><a href="#section42">Section 4-2</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
-    <div class="col-lg-10">
-      <div id="section1">
-        <h1>Section 1</h1>
-        <div class="row">
-        <div class="col-lg-4">
-          <p>Contrary to popular belief, Lorem
-            Ipsum is not simply random text. It has
-            roots in a piece of classical Latin literature
-            from 45 BC, making it over 2000 years old. Richard
-            McClintock, a Latin professor at Hampden-Sydney College
-            in Virginia, looked up one of the more obscure Latin
-            words, consectetur, from a Lorem Ipsum passage, and
-            going through the cites of the word in classical
-            literature, discovered the undoubtable source. Lorem
-            Ipsum comes from sections 1.10.32 and 1.10.33 of "de
-            Finibus Bonorum et Malorum" (The Extremes of Good and Evil)
-            by Cicero, written in 45 BC. This book is a treatise on the
-            theory of ethics, very popular during the Renaissance. The
-            first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",
-            comes from a line in section 1.10.32.
-            Contrary to popular belief, Lorem
-              Ipsum is not simply random text. It has
-              roots in a piece of classical Latin literature
-              from 45 BC, making it over 2000 years old. Richard
-              McClintock, a Latin professor at Hampden-Sydney College
-              in Virginia, looked up one of the more obscure Latin
-              words, consectetur, from a Lorem Ipsum passage, and
-              going through the cites of the word in classical
-              literature, discovered the undoubtable source. Lorem
-              Ipsum comes from sections 1.10.32 and 1.10.33 of "de
-              Finibus Bonorum et Malorum" (The Extremes of Good and Evil)
-              by Cicero, written in 45 BC. This book is a treatise on the
-              theory of ethics, very popular during the Renaissance. The
-              first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",
-              comes from a line in section 1.10.32.
-              Contrary to popular belief, Lorem
-                Ipsum is not simply random text. It has
-                roots in a piece of classical Latin literature
-                from 45 BC, making it over 2000 years old. Richard
-                McClintock, a Latin professor at Hampden-Sydney College
-                in Virginia, looked up one of the more obscure Latin
-                words, consectetur, from a Lorem Ipsum passage, and
-                going through the cites of the word in classical
-                literature, discovered the undoubtable source. Lorem
-                Ipsum comes from sections 1.10.32 and 1.10.33 of "de
-                Finibus Bonorum et Malorum" (The Extremes of Good and Evil)
-                by Cicero, written in 45 BC. This book is a treatise on the
-                theory of ethics, very popular during the Renaissance. The
-                first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",
-                comes from a line in section 1.10.32.</p>
-        </div>
-        <div class="col-lg-4">
-        </div>
-      </div>
-      </div>
-      <div id="section2">
-        <h1>Section 2</h1>
-        <div class="col-lg-4">
-          <p>Contrary to popular belief, Lorem
-            Ipsum is not simply random text. It has
-            roots in a piece of classical Latin literature
-            from 45 BC, making it over 2000 years old. Richard
-            McClintock, a Latin professor at Hampden-Sydney College
-            in Virginia, looked up one of the more obscure Latin
-            words, consectetur, from a Lorem Ipsum passage, and
-            going through the cites of the word in classical
-            literature, discovered the undoubtable source. Lorem
-            Ipsum comes from sections 1.10.32 and 1.10.33 of "de
-            Finibus Bonorum et Malorum" (The Extremes of Good and Evil)
-            by Cicero, written in 45 BC. This book is a treatise on the
-            theory of ethics, very popular during the Renaissance. The
-            first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",
-            comes from a line in section 1.10.32.
-            Contrary to popular belief, Lorem
-              Ipsum is not simply random text. It has
-              roots in a piece of classical Latin literature
-              from 45 BC, making it over 2000 years old. Richard
-              McClintock, a Latin professor at Hampden-Sydney College
-              in Virginia, looked up one of the more obscure Latin
-              words, consectetur, from a Lorem Ipsum passage, and
-              going through the cites of the word in classical
-              literature, discovered the undoubtable source. Lorem
-              Ipsum comes from sections 1.10.32 and 1.10.33 of "de
-              Finibus Bonorum et Malorum" (The Extremes of Good and Evil)
-              by Cicero, written in 45 BC. This book is a treatise on the
-              theory of ethics, very popular during the Renaissance. The
-              first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",
-              comes from a line in section 1.10.32.
-              Contrary to popular belief, Lorem
-                Ipsum is not simply random text. It has
-                roots in a piece of classical Latin literature
-                from 45 BC, making it over 2000 years old. Richard
-                McClintock, a Latin professor at Hampden-Sydney College
-                in Virginia, looked up one of the more obscure Latin
-                words, consectetur, from a Lorem Ipsum passage, and
-                going through the cites of the word in classical
-                literature, discovered the undoubtable source. Lorem
-                Ipsum comes from sections 1.10.32 and 1.10.33 of "de
-                Finibus Bonorum et Malorum" (The Extremes of Good and Evil)
-                by Cicero, written in 45 BC. This book is a treatise on the
-                theory of ethics, very popular during the Renaissance. The
-                first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",
-                comes from a line in section 1.10.32.</p>
-        </div>
-        <div class="col-lg-4">
-        </div>
-      </div>
-      <div id="section3">
-        <h1>Section 3</h1>
-        <p>Try to scroll this section and look at the navigation list while scrolling!</p>
-      </div>
-      <div id="section41">
-        <h1>Section 4-1</h1>
-        <p>Try to scroll this section and look at the navigation list while scrolling!</p>
-      </div>
-      <div id="section42">
-        <h1>Section 4-2</h1>
-        <p>Try to scroll this section and look at the navigation list while scrolling!</p>
-      </div>
-    </div>
-  </div>
-</div>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-header">
+       <a class="navbar-brand" href="https://www.cmap.illinois.gov/data/transportation/modeling?doAsUserId=fH2a30wm7Fk%3D%2F-%2Fasset_publisher%2FQ4En%2Fcontent%2Fid%2F322604">Chicago Metropolitan Agency for Planning</a>
+		 </nav>
 
+	<!-- CMAP Model Description -->
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="container">
+		<div class="row">
+			<p>PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+			  "activity-based" modeling framework. This is a multi-year effort
+			  outlined in our Strategic Plan for Advanced Modeling at CMAP.
+			  Activity-Based Modeling is increasingly viewed as a superior method
+			  to better understand the socioeconomic determinants of travel choice
+			  and for evaluating modern transportation solutions. The research effort to
+			  implement advanced models for metropolitan planning is still comparatively young.</p>
+		</div>
+		<div class="row">
+			<p><img src = "data/cmap/img/ctramp.png" width="25%" align="middle">Place holder image</p>
+		</div>
+		<br>
+		<br>
+		<div  id="scenarios" class="row">
+	 <div id="novizalert" class="alert alert-danger" style="display:none">Please select at least one visualization to display</div>
+	</div>
+	</div>
 </body>
+
 </html>
