@@ -165,12 +165,12 @@ function render_barchart_select(url, json, chartSelector, catID){
                       chartSet.add(d[chartColumn].replace(/\s+/g, ''));
                       return d[chartColumn].replace(/\s+/g, '');
                   }).key(function (d) {
-                     console.log(d)
+                     //console.log(d)
                       //change quantity to an int for convenience right off the bat
                       d[quantityColumn] = parseInt(d[quantityColumn]);
                       var subGroupName = d[subGroupColumn];
                       subGroupSet.add(subGroupName);
-                      console.log(subGroupName)
+                      //console.log(subGroupName)
                       return subGroupName;
                   }).key(function (d) {
                       var mainGroupName = d[mainGroupColumn];
@@ -286,28 +286,28 @@ function render_barchart_select(url, json, chartSelector, catID){
   			extNvd3Chart.update();
   		});
   		$("#" + chartSelector + "-pivot-axes").off().click(function () {
-  			console.log("changing pivotData from " + pivotData + " to " + !pivotData);
+  			//console.log("changing pivotData from " + pivotData + " to " + !pivotData);
   			pivotData = !pivotData;
 
   			$(chartSelector).empty();
   			createGrouped();
   		});
   		$("#" + chartSelector + "-toggle-percentage").off().click(function () {
-  			console.log("changing showPercentages from " + showPercentages + " to " + !showPercentages);
+  			//console.log("changing showPercentages from " + showPercentages + " to " + !showPercentages);
   			showPercentages = !showPercentages;
 
   			$(chartSelector).empty();
   			createGrouped();
   		});
   		$("#" + chartSelector + "-toggle-horizontal").off().click(function(){
-  			console.log("changing showAsVertical from " + showAsVertical + " to " + !showAsVertical);
+  			//console.log("changing showAsVertical from " + showAsVertical + " to " + !showAsVertical);
   			showAsVertical = !showAsVertical;
   			$(chartSelector).empty();
   			createGrouped();
   		});
 
   	    $("#" + chartSelector + "-toggle-stacked").off().click(function(){
-  			console.log("changing showAsStacked from " + showAsStacked + " to " + !showAsStacked);
+  			//console.log("changing showAsStacked from " + showAsStacked + " to " + !showAsStacked);
   			showAsStacked = !showAsStacked;
   			$(chartSelector).empty();
   			createGrouped();
@@ -326,7 +326,7 @@ function render_barchart_select(url, json, chartSelector, catID){
       } //end createGrouped
       createGrouped();
       window.addEventListener("resize", function () {
-          console.log("Got resize event. Calling grouped");
+          //console.log("Got resize event. Calling grouped");
           createGrouped();
       });
       return {};

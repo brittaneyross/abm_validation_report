@@ -86,7 +86,7 @@ function render_barchart_map(url, json, chartSelector){
 		//start off chain of initialization by reading in the data
 		function readInDataCallback() {
 			createMap(function () {
-				console.log("createMap callback")
+				//console.log("createMap callback")
 			});
 			setDataSpecificDOM();
 			svgChart = d3.select("#" + chartSelector + "-chart");
@@ -388,7 +388,7 @@ function render_barchart_map(url, json, chartSelector){
 				//if first time (enter() selection) create rect
 				//nv-barsWrap nvd3-svg
 				barsWrapRect = barsWrap.selectAll(barsWrapRectSelector).data([barsWrapRectId]).enter().insert("rect", ":first-child").attr("id", barsWrapRectId).attr("x", -marginLeft).attr("fill-opacity", "0.0").on("mousemove", function (event) {
-					//console.log('barsWrap mousemove');
+					////console.log('barsWrap mousemove');
 					var mouseY = d3.mouse(this)[1];
 					var numCounties = enabledCounties.length;
 					var heightPerGroup = (barsWrapRectHeight / numCounties);
@@ -415,14 +415,14 @@ function render_barchart_map(url, json, chartSelector){
 	                var width = bounds.width + marginLeft;
 	                barsWrapRectHeight = bounds.height;
 	                if (barsWrapRectHeight > 0) {
-	                    console.log("barsWrap setting  width=" + width + ", height=" + barsWrapRectHeight);
+	                    //console.log("barsWrap setting  width=" + width + ", height=" + barsWrapRectHeight);
 	                    barsWrap.select(barsWrapRectSelector).attr("width", width).attr("height", 20);
 	                    tryAgain = false;
 	                }
 	            }
 	            //end if innerContainerNode exists
 	            if (tryAgain) {
-	                console.log('updateChartMouseoverRect called but innerContainerNode is null so will try again shortly');
+	                //console.log('updateChartMouseoverRect called but innerContainerNode is null so will try again shortly');
 	                setTimeout(updateChartMouseoverRect, 500);
 	            }
 	        }
@@ -430,7 +430,7 @@ function render_barchart_map(url, json, chartSelector){
 		//end updateChartMouseoverRect
 		function changeCurrentCounty(newCurrentCounty) {
 			if (currentCounty != newCurrentCounty) {
-				console.log('changing from ' + currentCounty + " to " + newCurrentCounty);
+				//console.log('changing from ' + currentCounty + " to " + newCurrentCounty);
 				currentCounty = newCurrentCounty;
 				var countyLabels = d3.selectAll(".nvd3.nv-multiBarHorizontalChart .nv-x text ");
 				countyLabels.classed(chartSelector + "-trip-mode-current-county-zones", function (d, i) {
@@ -456,7 +456,7 @@ function render_barchart_map(url, json, chartSelector){
 		function createEmptyChart() {
 			nv.addGraph({
 				generate: function chartGenerator() {
-						//console.log('chartGenerator being called. nvd3Chart=' + nvd3Chart);
+						////console.log('chartGenerator being called. nvd3Chart=' + nvd3Chart);
 						var colorScale = d3.scale.category20();
 						var  nvd3Chart = nv.models.multiBarHorizontalChart();
 						if($("#" + chartSelector + "-stacked").is(":checked")){
@@ -465,7 +465,7 @@ function render_barchart_map(url, json, chartSelector){
 						    nvd3Chart = nv.models.multiBarHorizontalChart();
 	                    }
 
-						//console.log('chartGenerator being called. nvd3Chart set to:' + nvd3Chart);
+						////console.log('chartGenerator being called. nvd3Chart set to:' + nvd3Chart);
 
 						nvd3Chart.x(function (d, i) {
 							return d.label
@@ -473,7 +473,7 @@ function render_barchart_map(url, json, chartSelector){
 							return d.value
 						}).color(function (d, i) {
 							var color = colorScale(i);
-							//console.log('barColor i=' + i + ' modeColorIndex=' + modeColorIndex + ' mode=' + d.key + ' county=' + d.label + ' count=' + d.value + ' color=' + color);
+							////console.log('barColor i=' + i + ' modeColorIndex=' + modeColorIndex + ' mode=' + d.key + ' county=' + d.label + ' count=' + d.value + ' color=' + color);
 							return color;
 						}).duration(250).margin({
 							left: marginLeft,
@@ -493,12 +493,12 @@ function render_barchart_map(url, json, chartSelector){
 								top: marginTop
 							});
 							updateChart(function () {
-								console.log('updateChart callback after windowResize');
+								//console.log('updateChart callback after windowResize');
 							});
 						});
 						nvd3Chart.legend.dispatch.on('legendDblclick', function (event) {
 							var newTripMode = event.key;
-							console.log('legend legendDblclick on trip mode: ' + newTripMode);
+							//console.log('legend legendDblclick on trip mode: ' + newTripMode);
 							$('#' + chartSelector + '-current-trip-mode-zones').val(newTripMode);
 							updateCurrentTripModeOrClassification();
 							redrawMap();
@@ -513,11 +513,11 @@ function render_barchart_map(url, json, chartSelector){
 					} //end generate
 					,
 				callback: function (newGraph) {
-						console.log("nv.addGraph callback called");
+						//console.log("nv.addGraph callback called");
 						extNvd3Chart = newGraph;
 
 						updateChart(function () {
-							console.log("updateChart callback during after the nvd3 callback called");
+							//console.log("updateChart callback during after the nvd3 callback called");
 						});
 					} //end callback function
 			});
@@ -582,7 +582,7 @@ function render_barchart_map(url, json, chartSelector){
 	            strokeOpacity: 0.5,
 	            color: highlightColor
 	        };
-	        //console.log(isHighlightedVisible);
+	        ////console.log(isHighlightedVisible);
 	        if (highlightHidden == false || feature.zoneData == undefined) {
 	            returnStyle = {
 	                color: "none",
@@ -619,7 +619,7 @@ function render_barchart_map(url, json, chartSelector){
 			map.on('zoomend', function (type, target) {
 				var zoomLevel = map.getZoom();
 				var zoomScale = map.getZoomScale();
-				console.log('zoomLevel: ', zoomLevel, ' zoomScale: ', zoomScale);
+				//console.log('zoomLevel: ', zoomLevel, ' zoomScale: ', zoomScale);
 			});
 			$.getJSON("../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ZONE_FILE_LOC, function (zoneTiles) {
 				"use strict";
@@ -677,13 +677,13 @@ function render_barchart_map(url, json, chartSelector){
 				underlyingMapLayer.addTo(map);
 				$.getJSON("../data/"+ abmviz_utilities.GetURLParameter("region") +"/"+COUNTY_FILE, function (countyTiles) {
 					"use strict";
-					console.log(COUNTY_FILE+" success");
+					//console.log(COUNTY_FILE+" success");
 					//http://leafletjs.com/reference.html#tilelayer
 					countyLayer = L.geoJson(countyTiles, {
 						//keep only counties that we have data for
 						filter: function (feature) {
-						    console.log(feature.properties.NAME);
-						    console.log( countiesSet.has(feature.properties.NAME));
+						    //console.log(feature.properties.NAME);
+						    //console.log( countiesSet.has(feature.properties.NAME));
 							return countiesSet.has(feature.properties.NAME);
 						},
 						updateWhenIdle: true,
@@ -694,7 +694,7 @@ function render_barchart_map(url, json, chartSelector){
 						onEachFeature: onEachCounty
 					});
 					var allCountyBounds = countyLayer.getBounds();
-					console.log(allCountyBounds);
+					//console.log(allCountyBounds);
 					if(!SCENARIO_FOCUS)
 					    map.fitBounds(allCountyBounds);
 					map.setMaxBounds(allCountyBounds);
@@ -702,13 +702,13 @@ function render_barchart_map(url, json, chartSelector){
 					countyLayer.addTo(map);
 					highlightLayer.addTo(map);
 				}).success(function () {
-					console.log(COUNTY_FILE+" second success");
+					//console.log(COUNTY_FILE+" second success");
 				}).error(function (jqXHR, textStatus, errorThrown) {
-					console.log(COUNTY_FILE+" textStatus " + textStatus);
-					console.log(COUNTY_FILE+" errorThrown" + errorThrown);
-					console.log(COUNTY_FILE+ " responseText (incoming?)" + jqXHR.responseText);
+					//console.log(COUNTY_FILE+" textStatus " + textStatus);
+					//console.log(COUNTY_FILE+" errorThrown" + errorThrown);
+					//console.log(COUNTY_FILE+ " responseText (incoming?)" + jqXHR.responseText);
 				}).complete(function () {
-					console.log(COUNTY_FILE+" complete");
+					//console.log(COUNTY_FILE+" complete");
 				});
 				//end geoJson of county layer
 				function onEachCounty(feature, layer) {
@@ -808,12 +808,12 @@ function render_barchart_map(url, json, chartSelector){
 			function updateMapUI() {
 				bubblesShowing = $("#" + chartSelector + "-bubbles").is(":checked");
 				zonesShowing =  $("#" + chartSelector + "-zones").is(":checked");
-				console.log('updateBubbles: bubblesShowing=' + bubblesShowing);
-				console.log('$("#" + chartSelector + "-bubble-size").prop("disabled"): ' + $("#" + chartSelector + "-bubble-size").prop("disabled"));
+				//console.log('updateBubbles: bubblesShowing=' + bubblesShowing);
+				//console.log('$("#" + chartSelector + "-bubble-size").prop("disabled"): ' + $("#" + chartSelector + "-bubble-size").prop("disabled"));
 				$("#" + chartSelector + "-bubble-color").spectrum(bubblesShowing ? "enable" : "disable", true);
 				//$("#" + chartSelector + "-bubble-color").spectrum("disable", !bubblesShowing);
 				$("#" + chartSelector + "-bubble-size").prop("disabled", !bubblesShowing);
-				console.log('$("#" + chartSelector + "-bubble-size").prop("disabled"): ' + $("#" + chartSelector + "-bubble-size").prop("disabled"));
+				//console.log('$("#" + chartSelector + "-bubble-size").prop("disabled"): ' + $("#" + chartSelector + "-bubble-size").prop("disabled"));
 				if (bubblesShowing) {
 					updateBubbleColor();
 					updateBubbleSize();
@@ -899,7 +899,7 @@ function render_barchart_map(url, json, chartSelector){
 				max: 100,
 				values: handlers,
 				create: function (event, ui) {
-					console.log("Slider created")
+					//console.log("Slider created")
 					$('#' + chartSelector + ' .ui-slider-handle:first').html('<div class="tooltip top slider-tip"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + handlers[0] + '</div></div>');
 					$('#' + chartSelector + ' .ui-slider-handle:eq(1)').html('<div class="tooltip top slider-tip"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + handlers[1] + '</div></div>');
 					$('#' + chartSelector + ' .ui-slider-handle:last').html('<div class="tooltip top slider-tip"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + handlers[2] + '</div></div>');
@@ -996,14 +996,14 @@ function render_barchart_map(url, json, chartSelector){
 				// 			change: function (color) {
 				// 				//BUG this gets called when user still clicking in color chooser (despite docs) See
 				// 				//https://github.com/bgrins/spectrum/issues/289
-				// 				console.log("bubble-color spectrum change called with color:" + color);
+				// 				//console.log("bubble-color spectrum change called with color:" + color);
 				// 				bubbleColor = color;
 				// 				updateBubbleColor();
 				// 			},
 				hide: function (color) {
 					if (color != bubbleColor) {
 						bubbleColor = color;
-						console.log("bubble-color spectrum hide called with color:" + color);
+						//console.log("bubble-color spectrum hide called with color:" + color);
 						updateBubbleColor();
 					}
 				},
@@ -1011,7 +1011,7 @@ function render_barchart_map(url, json, chartSelector){
 				move: function (color) {
 					if (color != bubbleColor) {
 						bubbleColor = color;
-						console.log("bubble-color spectrum move called with color:" + color);
+						//console.log("bubble-color spectrum move called with color:" + color);
 						updateBubbleColor();
 					}
 				}
@@ -1086,8 +1086,8 @@ function render_barchart_map(url, json, chartSelector){
 			currentTripModeBubble = $('#' + chartSelector + '-current-trip-mode-bubbles').val();
 			currentTripModeZone = $('#' + chartSelector + '-current-trip-mode-zones').val();
 			var startTime = Date.now();
-			console.log('updateCurrentTripModeOrClassification: #current-trip-mode-zone.val()=' + currentTripModeZone);
-			console.log('updateCurrentTripModeOrClassification: #current-trip-mode-bubble.val()=' + currentTripModeBubble);
+			//console.log('updateCurrentTripModeOrClassification: #current-trip-mode-zone.val()=' + currentTripModeZone);
+			//console.log('updateCurrentTripModeOrClassification: #current-trip-mode-bubble.val()=' + currentTripModeBubble);
 			var serie = new geostats(modeData[currentTripModeZone].serie);
 			maxFeature = serie.max();
 			//handle the different classifications

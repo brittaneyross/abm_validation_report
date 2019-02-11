@@ -714,7 +714,10 @@
 </html>
 
 
-<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script
+  src="https://code.jquery.com/jquery-1.12.0.js"
+  integrity="sha256-yFU3rK1y8NfUCd/B4tLapZAy9x0pZCqLZLmFL3AWb7s="
+  crossorigin="anonymous"></script>
 <script type="text/javascript">
 	// Parse the URL parameter
 	var visualizations;
@@ -785,8 +788,8 @@
 	var sunburst_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/TreeMapData.csv";
 	fileExists(sunburst_path,"#sunburst","#sunburst_tab");
 
-	var scatter_path = "../data/" + abmviz_utilities.GetURLParameter("region") + "/" + abmviz_utilities.GetURLParameter("scenario") + "/Scatter.csv";
-	fileExists(scatter_path,"#scatter","#scatter_tab");
+	// var scatter_path = "../data/" + abmviz_utilities.GetURLParameter("region") + "/" + abmviz_utilities.GetURLParameter("scenario") + "/Scatter.csv";
+	// fileExists(scatter_path,"#scatter","#scatter_tab");
  var shownTabs = $('li[role="presentation"]').children(":visible");
 		if(shownTabs.length>0)
 		    shownTabs[0].click();
