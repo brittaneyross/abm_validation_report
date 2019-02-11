@@ -3,7 +3,9 @@
 
 var chord = (function () {
     "use strict";
-    var url = "../data/" + abmviz_utilities.GetURLParameter("region") + "/" + abmviz_utilities.GetURLParameter("scenario") + "/ChordData.csv";
+    var region_path =  "../data/" + abmviz_utilities.GetURLParameter("region");
+    var scenario_path = abmviz_utilities.GetURLParameter("scenario");
+    var url = region_path + "/" + scenario_path + "/ChordData.csv";
     var mainGroupColumnName;
     var subGroupColumnName;
     var quantityColumn;
