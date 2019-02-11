@@ -64,7 +64,7 @@ var chord = (function () {
 
     function getConfigSettings(callback) {
         if (showChartOnPage) {
-            $.getJSON("../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json", function (data) {
+            $.getJSON(region_path + "/" + "region.json", function (data) {
                 $.each(data, function (key, val) {
                     if (key == "CountyFile")
                         COUNTY_FILE = val;
@@ -94,7 +94,7 @@ var chord = (function () {
                     }
                     if (key == "scenarios" && Array.isArray(val)) {
                         $.each(val, function (k, v) {
-                            if (v.name === abmviz_utilities.GetURLParameter("scenario") && v.CenterMap) {
+                            if (v.name ===scenario_path && v.CenterMap) {
                                 CENTER_LOC = v.CenterMap;
                                 if (v.ScenarioFocus && v.ScenarioFocus.length > 0) {
                                     SCENARIO_FOCUS = true;
@@ -501,7 +501,7 @@ var chord = (function () {
         if (ZONE_FILTER_LOC != '') {
             var zonecsv;
             try {
-                d3.csv("../data/" + abmviz_utilities.GetURLParameter("region") + "/" + abmviz_utilities.GetURLParameter("scenario") + "/" + ZONE_FILTER_LOC, function (error, filterdata) {
+                d3.csv(region_path + "/" +scenario_path + "/" + ZONE_FILTER_LOC, function (error, filterdata) {
                     //zonecsv = d3.csv.parseRows(filterdata).slice(1);
                     if (error) {
                         $('#chord').html("<div class='container'><h3><span class='alert alert-danger'>Error: An error occurred while loading the chord data.</span></h3></div>");
@@ -666,7 +666,7 @@ var chord = (function () {
         countiesSet = new Set();
 
 
-        $.getJSON("../data/" + abmviz_utilities.GetURLParameter("region") + "/" + ZONE_FILE_LOC, function (zoneTiles) {
+        $.getJSON(region_path + "/" + ZONE_FILE_LOC, function (zoneTiles) {
             "use strict";
             //there should be at least as many zones as the number we have data for.
 
@@ -729,7 +729,7 @@ var chord = (function () {
                 opacity: 1.0
             });
             if (scenarioPolyFile != undefined) {
-                $.getJSON("../data/" + abmviz_utilities.GetURLParameter("region") + "/" + abmviz_utilities.GetURLParameter("scenario") + "/" + scenarioPolyFile, function (scenarioTiles) {
+                $.getJSON(region_path + "/" +scenario_path + "/" + scenarioPolyFile, function (scenarioTiles) {
                     "use strict";
                     focusLayer = L.geoJSON(scenarioTiles, {
                         style: styleFocusGeoJSONLayer
@@ -738,7 +738,7 @@ var chord = (function () {
                 });
             }
             underlyingMapLayer.addTo(map);
-            $.getJSON("../data/" + abmviz_utilities.GetURLParameter("region") + "/" + COUNTY_FILE, function (countyTiles) {
+            $.getJSON(region_path + "/" + COUNTY_FILE, function (countyTiles) {
                 "use strict";
                 console.log(COUNTY_FILE + " success");
 
