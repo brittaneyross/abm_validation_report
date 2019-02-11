@@ -817,17 +817,17 @@
         "scatter": false,
     };
     $.getJSON("../data/" + region + "/region.json", function (data) {
-		var icon = data.Icon;
-		var logo = data.Logo;
+		//var icon = data.Icon;
+		// logo = data.Logo;
 		var title = data.Title;
 		var linkURL = data.LinkURL;
 		var navbartitle = data.NavbarTitle;
 		var tabbedCharts = data.TabbedCharts;
-		$("link[rel*='icon']").attr("href", "../data/" + region + "/img/" + icon + "");
+		//$("link[rel*='icon']").attr("href", "../data/" + region + "/img/" + icon + "");
 		$("title").text(title);
 		$('#title_id').text(navbartitle);
 		$('#navbarlink').attr("href", linkURL);
-		$('#logo_id').attr("src", "../data/" + region + "/img/" + logo + "");
+		//$('#logo_id').attr("src", "../data/" + region + "/img/" + logo + "");
 
 		$.each(data.colorRamps, function (key, value) {
 			if (value == false)
