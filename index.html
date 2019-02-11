@@ -20,16 +20,16 @@
                             regiontitle = reg.FrontPageTitle;
                            if (v.default === true && setdefault == false) {
                                setdefault = true;
-                               var icon = reg.Icon;
-                               var logo = reg.Logo;
+                               //var icon = reg.Icon;
+                               //var logo = reg.Logo;
                                var title = reg.Title;
                                var linkURL = reg.LinkURL;
                                var navbartitle = reg.NavbarTitle;
-                               $("link[rel*='icon']").attr("href", "data/" + k + "/img/" + icon + "");
+                               //$("link[rel*='icon']").attr("href", "data/" + k + "/img/" + icon + "");
                                $("title").text(title);
                                $('#title_id').text(navbartitle);
                                $('#navbarlink').attr("href", linkURL);
-                               $('#logo_id').attr("src", "data/" + k + "/img/" + logo + "");
+                               //$('#logo_id').attr("src", "data/" + k + "/img/" + logo + "");
                            }
                            $('#' + k + '_id').append("<h4>"+ regiontitle +"</h4>");
                            $('#' + k + '_id').append("<ul id='" + k + "_scenarios' class='scenarios' style='margin-bottom: 25px;'> </ul>");
