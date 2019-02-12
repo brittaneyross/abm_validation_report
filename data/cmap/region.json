@@ -1,13 +1,13 @@
 {
   "Title":"CMAP ABMVIZ",
-  "CountyFile":"sacog_counties.json",
-  "ZoneFile":"sacogll.json",
+  "CountyFile":"counties.geojson",
+  "ZoneFile":"ringsectors.geojson",
   "Icon":"sacog.ico",
   "Logo":"sacog-logo.png",
   "NavbarTitle":"CMAP Activity-Base Model",
   "LinkURL":"https://www.cmap.illinois.gov/",
   "TabbedCharts": true,
-  "CenterMap": [38.57576, -121.47885],
+  "CenterMap": [41.881832, -87.623177],
   "FrontPageTitle": "CMAP Activity Based Model Reports",
   "FrontPageGraphic": "sacog-logo.png",
   "scenarios":{

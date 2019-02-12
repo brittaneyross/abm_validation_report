@@ -17,10 +17,18 @@
     font: 10px sans-serif;
 }
 
+#chord2-chart-container {
+    font: 10px sans-serif;
+}
+
+#wfChord-chart-container {
+    font: 10px sans-serif;
+}
+
 .chordLegend circle, .chordLegend text {
     cursor: pointer;
 }
- #chord-tooltip {
+#chord-tooltip {
         color: white;
         opacity: .9;
         background: #333;
@@ -33,3 +41,29 @@
         white-space: pre-wrap;
         pointer-events: none;
       }
+#chord2-tooltip {
+        color: white;
+        opacity: .9;
+        background: #333;
+        padding: 5px;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 1;
+        visibility: hidden;
+        white-space: pre-wrap;
+        pointer-events: none;
+      }
+#wfChord-tooltip {
+     color: white;
+     opacity: .9;
+     background: #333;
+     padding: 5px;
+     border: 1px solid lightgrey;
+     border-radius: 5px;
+     position: absolute;
+     z-index: 1;
+     visibility: hidden;
+     white-space: pre-wrap;
+     pointer-events: none;
+   }

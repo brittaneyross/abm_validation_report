@@ -16,13 +16,13 @@ function grouped_barchart (id, data, options, chartSelector, url) {
 	var extNvd3Chart;
 	var minBarWidth = 2;
 	var minBarSpacing = 1;
-	var marginTopVert = 100;
+	var marginTopVert = 20;
 	var marginBottomVert = 190;
-	var marginLeftVert = 150;
+	var marginLeftVert = 80;
 	var marginRightVert = 20;
 	var marginTop = 0;
 	var marginBottom = 50;
-	var marginLeft = 250;
+	var marginLeft = 50;
 	var marginRight = 50;
 	var barsWrap;
 	var barsWrapRect;
@@ -186,11 +186,11 @@ runAfterChartCreated();
                  //   nvd3Chart.yDomain([minVal, maxVal]);
                 //}
                 nvd3Chart.yAxis.tickFormat(showPercentages ? d3.format('.0%') : d3.format(',.0f'));
-                nvd3Chart.yAxis.axisLabel(quantityColumn).axisLabelDistance(showAsVertical ? marginLeft - 200 : 0);
+                nvd3Chart.yAxis.axisLabel(quantityColumn).axisLabelDistance(showAsVertical ? 10 : 0);
                 //this is actually for xAxis since basically a sideways column chart
                 //if(showAsVertical)
                 // nvd3Chart.rotateLabels(-90);
-                nvd3Chart.xAxis.axisLabel(mainGroupColumn).axisLabelDistance(showAsVertical ? 125 : marginLeft - 100);
+                nvd3Chart.xAxis.axisLabel(mainGroupColumn).axisLabelDistance(showAsVertical ? 10 : marginLeft - 100);
 
                 if (showAsVertical) {
                     nvd3Chart.reduceXTicks(false);

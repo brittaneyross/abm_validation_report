@@ -9,17 +9,12 @@ function render_chordmap(region_path,scenario_path,csv_filename,chartSelector){
       var url = region_path + "/" + scenario_path + "/" + csv_filename;
       var chartSelector2 = 'Chord2';
       var negativePrefix = "- ";
-      var activeIndex;
-      var chordPaths1;
-      var chordPaths2;
-      var opacityDefault = 0.8;
-      var svg2;
       var mainGroupColumnName;
       var subGroupColumnName;
       var quantityColumn;
       var countiesSet;
-      var width = 300,
-          height = 300;
+      var width = 100,
+          height = 100;
       var outerRadius = width / 2,
           innerRadius = outerRadius - 130;
       var json = null;
@@ -118,19 +113,19 @@ function render_chordmap(region_path,scenario_path,csv_filename,chartSelector){
               ZONE_FILTER_LOC = ZONE_FILTER_LOC;
               $("#" + chartSelector + "-grouppercent").off().click(function () {
                   showGrpPercent = !showGrpPercent;
-                  createChord1(url, chartSelector);
+                  createChord(url, chartSelector);
               });
               $("#" + chartSelector2 + "-grouppercent").off().click(function () {
                   showGrpPercent = !showGrpPercent;
-                  createChord2(url, chartSelector2);
+                  createChord(url, chartSelector2);
               });
               $("#" + chartSelector + "-wholepercent").off().click(function () {
                   showWholePercent = !showWholePercent;
-                  createChord1(url, chartSelector);
+                  createChord(url, chartSelector);
               });
               $("#" + chartSelector2 + "-wholepercent").off().click(function () {
                   showWholePercent = !showWholePercent;
-                  createChord2(url, chartSelector2);
+                  createChord(url, chartSelector2);
               });
           }
       }
@@ -144,15 +139,14 @@ function render_chordmap(region_path,scenario_path,csv_filename,chartSelector){
       function readInData(callback) {
           readInFilterData(function () {
               createMap(function () {
-                  createChord1(url, chartSelector);
-                 createChord2(url, chartSelector2);
+                  createChord(url, chartSelector);
+                  createChord(url, chartSelector2);
               })
           })
 
       }
 
-
-      function createChord1(chordDataFile, divID) {
+      function createChord(chordDataFile, divID) {
           var datamatrix = [];
           //read in data and create chord when finished
 
@@ -283,21 +277,7 @@ function render_chordmap(region_path,scenario_path,csv_filename,chartSelector){
                   .data(chord.groups())
                   .enter().append("g")
                   .attr("class", "group")
-                  .on("mouseover", function (d, i) {
-                    activeIndex = i;
-
-                    var name = nameByIndex[i].col;
-                    if (nameByIndex != undefined) {
-                        changeCurrentDistrict(nameByIndex[i].col);
-                    }
-
-                    chordPaths.classed("faded", function (p) {
-                      console.log(chordPaths)
-                        //console.log("source" + nameByIndex[p.source.index]);
-                        return p.source.index != activeIndex
-                            && p.target.index != activeIndex;
-                    });
-                  })
+                  .on("mouseover", mouseover)
                   .on("mouseout", function (d) {
                       d3.select('#' + divID + '-tooltip').style("visibility", "hidden")
                   });
@@ -378,6 +358,21 @@ function render_chordmap(region_path,scenario_path,csv_filename,chartSelector){
                   else {
                       changeCurrentDistrict(d.tname, d.sname);
                   }
+                  // var p = d3.format(".2%"), q = d3.format(",.0f")
+                  // var sourceVal = d.svalue;
+                  // var targetVal = d.tvalue;
+                  // if (showWholePercent) {
+                  //     sourceVal = p(sourceVal / wholeDataTotal);
+                  //     targetVal = p(targetVal / wholeDataTotal);
+                  //     return ""
+                  //         + indexByName[d.sname].name + " → " + indexByName[d.tname].name
+                  //         + ": " + q(d.svalue) + " (" + sourceVal + ")<br/>"
+                  // }
+                  // else {
+                  //     return ""
+                  //         + indexByName[d.sname].name + " → " + indexByName[d.tname].name
+                  //         + ": " + sourceVal + "<br/>"
+                  // }
               }
 
               function groupTip(d) {
@@ -438,7 +433,9 @@ function render_chordmap(region_path,scenario_path,csv_filename,chartSelector){
                 console.log(flowString);
 
           			d3.select("#" + divID + "-mouseoverValue").text(flowString);
-                d3.select("#" + divID + "-explanation").style("visibility", "")
+                d3.select("#" + divID + "-explanation").style("visibility", "").classed(divID + "-negative", function (d) {
+          				return d.source.index.startsWith(negativePrefix);
+          			});
           		};
 
               data = null;
@@ -506,7 +503,7 @@ function render_chordmap(region_path,scenario_path,csv_filename,chartSelector){
                       legendHeadersShowHide[i] = true;
                   }
               }
-              createChord1(chordDataFile, chartSelector);
+              createChord(chordDataFile, chartSelector);
 
           }
 
@@ -529,388 +526,6 @@ function render_chordmap(region_path,scenario_path,csv_filename,chartSelector){
               }
           });
       }
-
-
-      function createChord2(chordDataFile, divID) {
-          var datamatrix = [];
-          //read in data and create chord when finished
-
-          d3.csv(chordDataFile, function (error, data) {
-
-              "use strict";
-              if (error) {
-                  $('#' + divID).html("<div class='container'><h3><span class='alert alert-danger'>Error: An error occurred while loading the chord data.</span></h3></div>");
-                  throw error;
-              }
-              var headers = d3.keys(data[0]);
-              //var csv = d3.csv.parseRows(data).slice(1);
-              //var headers = d3.keys(data[0]);
-              var quantities = headers.slice(2);
-              var legendHead = headers.slice(2, headers.len);
-              if (_.size(legendHeadersShowHide) == 0) {
-                  for (var i = 0; i < legendHead.length; i++) {
-                      legendHeadersShowHide[legendHead[i]] = true;
-                  }
-              }
-              $('.' + divID + '-chart-maingroup').text(legendText);
-
-              mainGroupColumnName = headers[0];
-              subGroupColumnName = headers[1];
-              if (subGroupColumnName == undefined) {
-                  $('#' + divID).html("<div class='container'><h3><span class='alert alert-danger'>Error: An error occurred while loading the chord data.</span></h3></div>");
-                  return;
-              }
-              quantityColumn = 3;
-
-              indexByName = {};
-              nameByIndex = {};
-              var outerRadius = $('#' + divID + '-chart-container').width() / 2,
-                  innerRadius = outerRadius - 130;
-              height = $('#' + divID + '-chart-container').width();
-              width = $('#' + divID + '-chart-container').width();
-
-              var r1 = height / 2, r0 = r1 / 2;
-              var chord = d3.layout.chord()
-                  .padding(.02)
-                  .sortSubgroups(d3.descending)
-                  .sortChords(d3.descending);
-
-              var arc = d3.svg.arc()
-                  .innerRadius(innerRadius)
-                  .outerRadius(innerRadius + 20);
-              var windwidth = $('#' + divID + '-chart-container').width();
-              d3.select('#' + divID + '-chart-container').select("svg").remove();
-              d3.select('#' + divID + '-dropdown-div').select("svg").remove();
-
-              var svg2 = d3.select("#" + divID + "-chart-container").append("svg:svg")
-                  .attr("width", windwidth - 20)
-                  .attr("height", height)
-                  .style("padding-left", "1%")
-                  .style("padding-right", "3%")
-                  .append("svg:g")
-                  .attr("id", "circle")
-                  .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-              svg2.append("circle")
-                  .attr("r", r0 + 20);
-              var n = 0;
-              wholeDataTotal = 0;
-
-              data.forEach(function (d) {
-                  var total = 0;
-                  var grpTotal = 0;
-                  for (var i = 0; i < _.size(legendHeadersShowHide); i++) {
-                      if (legendHeadersShowHide[legendHead[i]]) {
-                          var value = Number.parseFloat(d[legendHead[i]]);
-                          total += value;
-                          grpTotal += value;
-                      }
-                  }
-                  d.Total = (Number.parseFloat(total));
-                  if (!(d[mainGroupColumnName] in indexByName)) {
-                      nameByIndex[n] = {
-                          name: d[mainGroupColumnName],
-                          col: d[mainGroupColumnName],
-                          index: n,
-                          grptotal: Number.parseFloat(total)
-                      };
-
-                      indexByName[d[mainGroupColumnName]] = {
-                          index: n++,
-                          name: d[mainGroupColumnName],
-                          grptotal: Number.parseFloat(total)
-                      };
-
-                  } else {
-                      indexByName[d[mainGroupColumnName]].grptotal += Number.parseFloat(total);
-                      nameByIndex[indexByName[d[mainGroupColumnName]].index].grptotal += Number.parseFloat(total);
-                  }
-                  wholeDataTotal += total;
-              });
-              //initialize matrix
-              for (var i = 0; i < _.size(indexByName); i++) {
-                  datamatrix[i] = [];
-                  for (var j = 0; j < _.size(indexByName); j++) {
-                      datamatrix[i][j] = 0;
-                  }
-              }
-
-              //populate matrices
-              data.forEach(function (d) {
-                  var mainGrp = d[mainGroupColumnName];
-                  var subGrp = d[subGroupColumnName];
-
-
-                  datamatrix[indexByName[mainGrp].index][indexByName[subGrp].index] = d.Total;
-              });
-              var matrixmap = chordMpr(data);
-              matrixmap.addValuesToMap("FROM")
-                  .setFilter(function (row, a, b) {
-                      return (row.FROM === a.name && row.TO === b.name)
-                  }).setAccessor(function (recs, a, b) {
-                  if (!recs[0]) return 0;
-                  return recs[0].Total;
-              });
-
-              function value() {
-                  console.log();
-              }
-
-              var rdr = chordRdr(matrixmap.getMatrix(), matrixmap.getMap());
-              chord.matrix(datamatrix);
-
-              var g = svg2.selectAll("g.group")
-                  .data(chord.groups())
-                  .enter().append("g")
-                  .attr("class", "group")
-                  .on("mouseover", function (d, i) {
-                    activeIndex = i;
-                    var name = nameByIndex[i].col;
-                    if (nameByIndex != undefined) {
-                        changeCurrentDistrict(nameByIndex[i].col);
-                    }
-
-                    chordPaths2.classed("faded", function (p) {
-                        //console.log("source" + nameByIndex[p.source.index]);
-
-                        return p.source.index != activeIndex
-                            && p.target.index != activeIndex;
-                    });
-                  })
-                  .on("mouseout", function (d) {
-                      d3.select('#' + divID + '-tooltip').style("visibility", "hidden")
-                  });
-
-              var groupPath = g.append("path")
-                  .style("fill", function (d) {
-                      return fill(d.index);
-                  })
-                  .style("stroke", function (d) {
-                      return fill(d.index);
-                  })
-                  .attr("d", arc);
-
-              var groupText = g.append("text")
-                  .each(function (d) {
-                      d.angle = (d.startAngle + d.endAngle) / 2;
-                  })
-                  .attr("dy", ".35em")
-                  .attr("transform", function (d) {
-                      return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
-                          + "translate(" + (innerRadius + 26) + ")"
-                          + (d.angle > Math.PI ? "rotate(180)" : "");
-                  })
-                  .style("text-anchor", function (d) {
-                      return d.angle > Math.PI ? "end" : null;
-                  })
-                  .style("font-size", labelSize + "px")
-                  .text(function (d) {
-                      return nameByIndex[d.index].name;
-                  });
-              // Remove the labels that don't fit. :(
-              groupText.filter(function (d, i) {
-                  var check = groupPath[0][i];
-                  console.log("Group name:" + groupPath[0][i].nextSibling.innerHTML + " length:" + indexByName[groupPath[0][i].nextSibling.innerHTML].grptotal);
-                  return (indexByName[groupPath[0][i].nextSibling.innerHTML].grptotal / wholeDataTotal * 100) < 1.5
-              })
-                  .remove();
-
-              //svg.selectAll('.group text').call(wrap,120);
-              chordPaths2 = svg2.selectAll("." + divID)
-                  .data(chord.chords)
-                  .enter().append("svg:path")
-                  .attr("class", divID)
-                  .style("stroke", function (d) {
-                      return d3.rgb(fill(d.source.index)).darker();
-                  })
-                  .style("fill", function (d) {
-                      return fill(d.source.index);
-                  })
-                  .attr("d", d3.svg.chord().radius(innerRadius)).on("mouseover", function (d, i) {
-                      showExplanation(d,i);
-                      d3.select("#" + divID + "-tooltip")
-                          .style("visibility", "visible")
-                          .html(chordTip(rdr(d)))
-                          .style("top", function () {
-                              if (d3.event.pageY > height) {
-                                  return (height / 2) + "px";
-                              }
-                              return (d3.event.pageY - 100) + "px"
-                          })
-                          .style("left", function () {
-                              if (d3.event.pageX + 100 > width / 2) {
-                                  return width / 2 + "px";
-                              }
-                              return (d3.event.pageX + 100) + "px";
-                          })
-
-                  })
-                  .on("mouseout", function (d) {
-                      d3.select("#" + divID + "-tooltip").style("visibility", "hidden")
-                  });
-
-              function chordTip(d, i) {
-                  var otherdist = indexByName[d.sname];
-                  if (currentDistrict != d.tname) {
-                      changeCurrentDistrict(d.sname, d.tname);
-                  }
-                  else {
-                      changeCurrentDistrict(d.tname, d.sname);
-                  }
-              }
-
-              function groupTip(d) {
-                  var p = d3.format(".2%"), q = d3.format(",.0f")
-                  var value = d.gvalue;
-                  if (showWholePercent) {
-                      return ""
-                          + indexByName[d.gname].name + " : " + q(value) + " (" + p(value / wholeDataTotal) + ") <br/>";
-                          //d3.select("#" + divID + "-hoverText").text(percentageString);
-                  } else {
-                      return ""
-                          + indexByName[d.gname].name + " : " + q(value) + "<br/>";
-                          //d3.select("#" + divID + "-hoverText").text(percentageString);
-                  }
-              }
-
-              function mouseover2(d, i) {
-                  //console.log()
-
-                  activeIndex = i;
-                  console.log("active index = " + activeIndex);
-                  var name = nameByIndex[activeIndex].col;
-                  console.log("source" + nameByIndex[activeIndex].col);
-                  d3.select("#" + divID + "-tooltip")
-                      .style("visibility", "visible")
-                      .html(groupTip(rdr(d)))
-                      .style("top", function () {
-                          if (d3.event.pageY > height) {
-                              return height / 2 + "px";
-                          }
-                          return (d3.event.pageY - 80) + "px"
-                      })
-                      .style("left", function () {
-                          if ((d3.event.pageX - 50) > 0 || (d3.event.pageX - 50) > width) {
-                              return (d3.event.pageX - 50) + "px";
-                          } else {
-                              return 0 + "px";
-                          }
-                      })
-                  if (nameByIndex != undefined) {
-                      changeCurrentDistrict(nameByIndex[i].col);
-                  }
-                  chordPaths2.classed("faded", function (p) {
-                      //console.log("source" + nameByIndex[p.source.index]);
-
-                      return p.source.index != activeIndex
-                          && p.target.index != activeIndex;
-                  });
-              }
-
-              function showExplanation(d, i) {
-                console.log(d);
-                var originName = nameByIndex[d.source.index].col
-                var destName = nameByIndex[d.target.index].col
-                var originTrips = d.source.value
-                console.log("Origin = " + nameByIndex[d.source.index].col);
-                console.log("Destination = " +nameByIndex[d.target.index].col);
-                console.log(d.source.value);
-
-                var flowString = originName + " -> " + destName + ": " + originTrips
-                console.log(flowString);
-
-          			d3.select("#" + divID + "-mouseoverValue").text(flowString);
-                d3.select("#" + divID + "-explanation").style("visibility", "")
-          		};
-
-              data = null;
-
-              var size = _.size(legendHeadersShowHide);
-              var columns = width / 165;
-              var lines = Number.parseInt(Math.ceil(size / columns));
-              var legheight = 30 * lines;
-              var container = d3.select("#" + divID + "-dropdown-div").append("svg")
-
-                  .attr("width", width).attr("height", legheight).style('padding-top', "10px");
-              var dataL = 0;
-              var offset = 100;
-              var newdataL = 0;
-
-              var legendfill = d3.scale.category20();
-              var xOff, yOff;
-              var legendOrdinal = container.selectAll('.chordLegend').data(legendHead)
-                  .enter().append('g').attr('class', 'chordLegend').attr("transform", function (d, i) {
-                      var calcX = (i % legendRows) * (width / columns);
-
-                      xOff = (i % legendRows) * (width / columns)
-
-                      yOff = Math.floor(i / legendRows) * 20
-                      return "translate(" + xOff + "," + yOff + ")"
-                  });
-              var circles = legendOrdinal.append("circle")
-                  .attr("cx", 10)
-                  .attr("cy", 7)
-                  .attr("r", 5)
-                  .style("stroke", "black")
-                  .style("fill", function (d, i) {
-                      return legendHeadersShowHide[d] ? "black" : "white";
-                  });
-              var texts = legendOrdinal.append('text')
-                  .attr("x", 20)
-                  .attr("y", 12)
-                  //.attr("dy", ".35em")
-                  .text(function (d, i) {
-                      return d
-                  })
-                  .attr("class", "textselected")
-                  .style("text-anchor", "start")
-                  .style("font-size", 15)
-              circles.on("click", function (d) {
-                  showHideBlobs(d);
-              })
-              texts.on("click", function (d) {
-                  showHideBlobs(d);
-              })
-          });   //end d3.csv
-
-          function showHideBlobs(d) {
-              legendHeadersShowHide[d] = !legendHeadersShowHide[d];
-              var result = true;
-              for (var i in legendHeadersShowHide) {
-                  if (legendHeadersShowHide[i] === true) {
-                      result = false;
-                      break;
-                  }
-              }
-              //if all the values are false (set to hidden) show them all, we don't want empty space.
-              if (result == true) {
-                  for (var i in legendHeadersShowHide) {
-                      legendHeadersShowHide[i] = true;
-                  }
-              }
-              createChord2(chordDataFile, chartSelector);
-
-          }
-
-          $("#" + divID + "-focus-color").spectrum({
-              color: focusColor,
-              showInput: true,
-              className: "full-spectrum",
-              showInitial: false,
-              showPalette: true,
-              showAlpha: true,
-              showSelectionPalette: true,
-              maxSelectionSize: 10,
-              preferredFormat: "hex",
-              localStorageKey: "spectrum.demo",
-              palette: palette,
-              change: function (color) {
-                  focusColor = color;
-                  redrawMap();
-
-              }
-          });
-      }
-
 
       function readInFilterData(callback) {
           if (ZONE_FILTER_LOC != '') {
@@ -1215,8 +830,8 @@ function render_chordmap(region_path,scenario_path,csv_filename,chartSelector){
       //createChord();
       window.addEventListener("resize", function () {
           console.log("Got resize event. Calling createTimeUse");
-          createChord1(url, chartSelector);
-          createChord2(url, chartSelector2);
+          createChord(url, chartSelector);
+          createChord(url, chartSelector2);
       });
   }()); //end encapsulating IIFE
 }

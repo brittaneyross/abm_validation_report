@@ -21,17 +21,18 @@
 	<script defer src="../vendor/vizicities.js"></script>
 	<script type="text/javascript" src="../abmviz_utilities.js"></script>
 
-	<script defer type="text/javascript" src="grouped_barchart.js"></script>
+	<script type="text/javascript" src="grouped_barchart.js"></script>
 	<script type="text/javascript" src='grouped_barchart_data.js'></script>
 
-	<script defer type="text/javascript" src="grouped_barchart_select.js"></script>
+	<script type="text/javascript" src="grouped_barchart_select.js"></script>
 	<script type="text/javascript" src='grouped_barchart_data_select.js'></script>
 
 	<script type="text/javascript" src='barchart_and_map.js'></script>
+	<script type="text/javascript" src='chord.js'></script>
 	<script defer type="text/javascript" src="mapper.js"></script>
 	<script type="text/javascript" src='barchart_dropdownv2.js'></script>
 
-	<script defer type="text/javascript" src="radar-chart-nbremer.js"></script>
+	<script type="text/javascript" src="radar-chart-nbremer.js"></script>
 
 	<link rel="shortcut icon" href="">
 	<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" />
@@ -301,28 +302,50 @@
 		<div class="row">
 			<div align="center">
 			<h3>PLACE HOLDER TITLE</h3>
+			<!-- <label class="checkbox-inline">
+			<input id="barchart-toggle-percentage" type="checkbox"><small>Show as Percentage?</small></label><br> -->
 		</div>
-			<div class="col-xs-2">
-				<br>
-				<br>
-				<p><small>Select a data type for comparison.Placeholder text.
-				Add data source information and any notes</small></p>
-				<select id="catPopSyn">
-		      <option value="veh">Vehicles</option>
-		      <option value="hh">Households</option>
-		    </select>
-				<br>
-				<br>
-				<label class="checkbox-inline">
-					<input id="barchart-toggle-percentage" type="checkbox"><small>Show as Percentage?</small></label>
-					<input id="barchart-toggle-horizontal" type="checkbox"><small>Show as Vertical Chart?</small></label>
+			<div class="col-xs-6" style="height:400px" align="center">
+				<h3>Household Size</h3>
+				<div id="hhsize-div"></div>
+				<div id="hhsize-container"></div>
 			</div>
-			<div class="col-xs-8" style="height:400px">
-				<h3></h3>
-				<div id="barchart-div"></div>
-				<div id="barchart-container"></div>
+			<div class="col-xs-6" style="height:400px" align="center">
+				<h3>Vehicles</h3>
+				<div id="hhveh-div"></div>
+				<div id="hhveh-container"></div>
 			</div>
 	  </div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<div class="row">
+			<div class="col-xs-6" style="height:400px" align="center">
+				<h3>Household Age</h3>
+				<div id="hhage-div"></div>
+				<div id="hhage-container"></div>
+			</div>
+			<div class="col-xs-6" style="height:400px" align="center">
+				<h3>Household Income</h3>
+				<div id="hhincome-div"></div>
+				<div id="hhincome-container"></div>
+			</div>
+		</div>
+		<br>
+		<br>
+		<div class="row">
+			<div class="col-xs-6" style="height:400px" align="center">
+				<h3>Household Workers</h3>
+				<div id="hhworkers-div"></div>
+				<div id="hhworkers-container"></div>
+			</div>
+			<div class="col-xs-6" style="height:400px" align="center">
+				<h3>Household Person Type</h3>
+				<div id="hhperson-div"></div>
+				<div id="hhperson-container"></div>
+			</div>
+		</div>
 		<div class="row">
 			<br>
 			<br>
@@ -531,34 +554,56 @@
 		<div class="row">
 			<br>
 			<div align = "center">
-			<h3>Trip flows PLACEHOLDER</h3>
+			<h3>Trip Flows</h3>
 		  </div>
-			<div id="chord" class="row dynamic-content">
-				<div class="col-md-6 col-sm-12 right-border">
-					<div id="chord-tooltip" class="">
-					</div>
-					<div id="chord-main">
-						<div id="chord-dropdown-div" class="col-xs-5">
-							<p class="chord-chart-maingroup"></p>
+			<div id="wfChord" class="row dynamic-content">
+				<div class="col-md-5">
+						<div id="wfChord-main"  style="width: 100%; height: 40%">
+							<div id="wfChord-tooltip" class=""></div>
+							<h4>Survey</h4><div id="wfChord-chart-container" style= "width: 100%; height: 40%"></div>
 						</div>
-						<div id="chord-chart-container"></div>
+						<div id="Chord2-main" style="width: 100%; height: 40%">
+							<h4>Model</h4>
+							<div id="Chord2-tooltip" class=""></div>
+							<div id="Chord2-chart-container" style= "width: 100%; height: 40%"></div>
+						</div>
 					</div>
-				</div>
-				<div class="col-md-6 col-sm-12 ">
-					<div class="col-xs-12" id="chord-by-district-map" style="width: 100%;height:75%;"></div>
-					<div class="col-xs-6" style="margin-top:1em;text-align:right">
+					<div class="col-md-2">
+						<br>
+						<br>
+						<br>
+						<div class="caption" align="middle">
+							<p><small>Hover over chord diagram to display flows between ring sectors.</small></p>
+						</div>
+						<div id="wfChord-explanation" style="visibility: hidden;" class="col-xs-5">
+							<p>
+								<h4>Survey</h4>
+								<span id="wfChord-mouseoverValue"></span>
+							</p>
+						</div>
+						<div id="Chord2-explanation" style="visibility: hidden;" class="col-xs-5">
+							<p>
+								<h4>Model</h4>
+								<span id="Chord2-mouseoverValue"></span>
+							</p>
+						</div>
 					</div>
-				</div>
-				<div class="caption" align="middle">
-					<p><small>PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
-						"activity-based" modeling framework. This is a multi-year effort
-						outlined in our Strategic Plan for Advanced Modeling at CMAP.</small></p>
+					<div class="col-md-5">
+						<br>
+						<br>
+						<br>
+						<div id="wfChord-by-district-map" style="width: 100%;height:75%;"></div>
+						<div class="caption" align="middle">
+							<p><small>PLACE HOLDER TEXT CMAP is also developing a set of advanced models under the
+								"activity-based" modeling framework. This is a multi-year effort
+								outlined in our Strategic Plan for Advanced Modeling at CMAP.</small></p>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 		<!-- end timeuse -->
-</div>
 <div role="tabpanel" class="tab-pane" id="sunburst_tab">
 	<div class="container">
 		<div class="row">
@@ -756,6 +801,10 @@
 
     }
 	$(document).ready(function () {
+
+		var region_path = "../data/"+abmviz_utilities.GetURLParameter("region");
+		var scenario_path = abmviz_utilities.GetURLParameter("scenario") ;
+
     var threedanimated_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/3DAnimatedMapData.csv";
     fileExists(threedanimated_path,"#three3d","#tripmode_tab");
 
@@ -763,24 +812,40 @@
 	fileExists(timeuse_path,'#timeuse','#transit_tab');
 
 	var chord_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/ChordData.csv";
-	fileExists(chord_path,'#chord','#workflows_tab');
+	render_chordmap(region_path,scenario_path,"ChordData_cmap.csv","wfChord");
+	fileExists(chord_path,'#wfChord','#workflows_tab');
 
 	var barchartmap_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/BarChartAndMapData.csv";
-	render_barchart_map(barchartmap_path, "../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json", "mode-share-by-county");
+	render_barchart_map(barchartmap_path, region_path + "/" + "region.json", "mode-share-by-county");
 	fileExists(barchartmap_path,"#mode-share-by-county","#auto_tab");
 
-	var barchartmap_path2 = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/BarChartAndMapData.csv";
-	render_barchart_map(barchartmap_path2, "../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json", "mode-share-by-county2");
+	var barchartmap_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/BarChartAndMapData.csv";
+	render_barchart_map(barchartmap_path, region_path + "/" + "region.json", "mode-share-by-county2");
 	fileExists(barchartmap_path,"#mode-share-by-county2","#auto_tab");
 
-	//makeGroupChartv2("data/ModeByPurpose01.csv","#PurposeChartpums","#catPopSyn","#myCheckbox",3);
-	// var barchart_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/BarChartData.csv";
-	// render_barchart(barchart_path,"../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json","gbarchart");
-	// fileExists(barchart_path,"#gbarchart-div","#popsyn_tab");
-	//
-	var barchart_path2 = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/BarChartData_select.csv";
-	render_barchart_select(barchart_path2,"../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json","barchart", "#catPopSyn");
-	fileExists(barchart_path2,"#barchart-div","#popsyn_tab");
+	var barchart_age = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/hhage.csv";
+	render_barchart(barchart_age,"../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json","hhage");
+	fileExists(barchart_age,"#hhage-div","#popsyn_tab");
+
+	var barchart_workers = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/hhworkers.csv";
+	render_barchart(barchart_workers,region_path + "/" + "region.json","hhworkers");
+	fileExists(barchart_workers,"#hhworkers-div","#popsyn_tab");
+
+	var barchart_income= "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/hhincome.csv";
+	render_barchart(barchart_income,"../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json","hhincome");
+	fileExists(barchart_income,"#hhincome-div","#popsyn_tab");
+
+	var barchart_person = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/hhperson.csv";
+	render_barchart(barchart_person,"../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json","hhperson");
+	fileExists(barchart_person,"#hhperson-div","#popsyn_tab");
+
+	var barchart_size = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/hhsize.csv";
+	render_barchart(barchart_size,"../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json","hhsize");
+	fileExists(barchart_size,"#hhsize-div","#popsyn_tab");
+
+	var barchart_veh = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/hhveh.csv";
+	render_barchart(barchart_veh,"../data/" + abmviz_utilities.GetURLParameter("region") + "/" + "region.json","hhveh");
+	fileExists(barchart_veh,"#hhveh-div","#popsyn_tab");
 
 	var radar_path = "../data/"+abmviz_utilities.GetURLParameter("region")+"/"+ abmviz_utilities.GetURLParameter("scenario") + "/RadarChartsData.csv";
 	fileExists(radar_path,"#radar","#temp_tab");
@@ -894,15 +959,15 @@
 		        window.dispatchEvent(new Event('resize'));
             }
         });
-		$('a[href="#transit_tab"]').on('shown.bs.tab', function (e) {
-		    if(loadedScripts["chord"] ==false){
-                $.getScript("chord.js").done(function(scripts,textStatus){
-                    loadedScripts["chord"] = true;
-                });
-            } else {
-		        window.dispatchEvent(new Event('resize'));
-            }
-        });
+		// $('a[href="#transit_tab"]').on('shown.bs.tab', function (e) {
+		//     if(loadedScripts["chord"] ==false){
+    //             $.getScript("chord.js").done(function(scripts,textStatus){
+    //                 loadedScripts["chord"] = true;
+    //             });
+    //         } else {
+		//         window.dispatchEvent(new Event('resize'));
+    //         }
+    //     });
 		$('a[href="#temp_tab"]').on('shown.bs.tab', function (e) {
 		    if(loadedScripts["radar"] ==false){
                 $.getScript("radar.js").done(function(scripts,textStatus){
